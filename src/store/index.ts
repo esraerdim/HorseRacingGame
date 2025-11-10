@@ -1,7 +1,11 @@
 import { createStore } from 'vuex'
+import { horsesModule, type HorsesState } from './modules/horses'
+import { raceModule, type RaceState } from './modules/race'
 
 export interface RootState {
   version: string
+  horses: HorsesState
+  race: RaceState
 }
 
 export const store = createStore<RootState>({
@@ -17,7 +21,10 @@ export const store = createStore<RootState>({
     },
   },
   actions: {},
-  modules: {},
+  modules: {
+    horses: horsesModule,
+    race: raceModule,
+  },
 })
 
 export default store
