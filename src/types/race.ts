@@ -1,12 +1,4 @@
-import type { Horse } from './horse'
-
-export interface RoundConfig {
-  roundNumber: number
-  distance: number
-  horses: Horse[]
-}
-
-export interface RoundAssignment {
+export interface RaceRound {
   roundNumber: number
   distance: number
   horseIds: number[]
@@ -18,7 +10,7 @@ export interface RaceResultEntry {
   elapsedMs: number
 }
 
-export interface RoundResult {
+export interface RaceRoundResult {
   roundNumber: number
   entries: RaceResultEntry[]
 }

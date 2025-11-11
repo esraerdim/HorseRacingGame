@@ -1,17 +1,13 @@
 import type { Module } from 'vuex'
 import type { RootState } from '../index'
-import type {
-  RaceStatus,
-  RoundAssignment,
-  RoundResult,
-} from '@/types'
+import type { RaceRound, RaceRoundResult, RaceStatus } from '@/types'
 import { generateRaceSchedule, simulateRoundResult } from '@/utils/race'
 
 export interface RaceState {
   status: RaceStatus
   currentRoundIndex: number
-  schedule: RoundAssignment[]
-  results: RoundResult[]
+  schedule: RaceRound[]
+  results: RaceRoundResult[]
 }
 
 const initialState: RaceState = {
@@ -36,14 +32,14 @@ export const raceModule: Module<RaceState, RootState> = {
     setStatus(state, status: RaceStatus) {
       state.status = status
     },
-    setSchedule(state, schedule: RoundAssignment[]) {
+    setSchedule(state, schedule: RaceRound[]) {
       state.schedule = schedule
       state.currentRoundIndex = 0
     },
     advanceRound(state) {
       state.currentRoundIndex += 1
     },
-    appendResult(state, result: RoundResult) {
+    appendResult(state, result: RaceRoundResult) {
       state.results = [...state.results, result]
     },
     reset(state) {
@@ -68,7 +64,7 @@ export const raceModule: Module<RaceState, RootState> = {
       commit('setSchedule', schedule)
       commit('setStatus', 'ready')
     },
-    recordRoundResult({ commit, rootState }, assignment: RoundAssignment) {
+    recordRoundResult({ commit, rootState }, assignment: RaceRound) {
       const horses = rootState.horses.pool
       const seed = rootState.horses.seed + assignment.roundNumber
       const result = simulateRoundResult({

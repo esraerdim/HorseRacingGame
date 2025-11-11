@@ -7,4 +7,8 @@ const app = createApp(App)
 
 app.use(store)
 
+if (import.meta.env.DEV) {
+  ;(window as typeof window & { __STORE__?: typeof store }).__STORE__ = store
+}
+
 app.mount('#app')

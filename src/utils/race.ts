@@ -1,4 +1,4 @@
-import type { Horse, RoundAssignment, RoundResult } from '@/types'
+import type { Horse, RaceRound, RaceRoundResult } from '@/types'
 import {
   ROUND_DISTANCES,
   RACE_HORSES_PER_ROUND,
@@ -13,10 +13,10 @@ export interface ScheduleGenerationInput {
 export const generateRaceSchedule = ({
   horses,
   seed,
-}: ScheduleGenerationInput): RoundAssignment[] => {
+}: ScheduleGenerationInput): RaceRound[] => {
   const rng = new SeededRandom(seed)
   const totalRounds = ROUND_DISTANCES.length
-  const schedule: RoundAssignment[] = []
+  const schedule: RaceRound[] = []
 
   for (let i = 0; i < totalRounds; i += 1) {
     const shuffled = rng.shuffle(horses.map((horse) => horse.id))
@@ -38,7 +38,7 @@ export const generateRaceSchedule = ({
 }
 
 export interface ResultSimulationInput {
-  assignment: RoundAssignment
+  assignment: RaceRound
   horses: Horse[]
   seed: number
 }
@@ -47,7 +47,7 @@ export const simulateRoundResult = ({
   assignment,
   horses,
   seed,
-}: ResultSimulationInput): RoundResult => {
+}: ResultSimulationInput): RaceRoundResult => {
   const rng = new SeededRandom(seed)
   const participants = assignment.horseIds
     .map((horseId) => horses.find((horse) => horse.id === horseId))

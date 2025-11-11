@@ -28,6 +28,7 @@ export const horsesModule: Module<HorsesState, RootState> = {
     horsePool: (moduleState) => moduleState.pool,
     horseCount: (moduleState) => moduleState.pool.length,
     generationSeed: (moduleState) => moduleState.seed,
+    isGenerating: (moduleState) => moduleState.isGenerating,
   },
   mutations: {
     setPool(moduleState, horses: Horse[]) {
@@ -81,6 +82,7 @@ export const horsesModule: Module<HorsesState, RootState> = {
 
         commit('setPool', horses)
         commit('setSeed', resolvedSeed)
+        return horses
       } finally {
         commit('setGenerating', false)
       }

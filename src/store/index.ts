@@ -8,6 +8,10 @@ export interface RootState {
   race: RaceState
 }
 
+interface GenerateRaceProgramPayload {
+  seed?: number
+}
+
 export const store = createStore<RootState>({
   state: {
     version: '0.1.0',
@@ -20,7 +24,17 @@ export const store = createStore<RootState>({
       state.version = payload
     },
   },
-  actions: {},
+  actions: {
+    async generateRaceProgram(
+      { dispatch },
+      payload: GenerateRaceProgramPayload = {},
+    ) {
+      const generationSeed = payload.seed ?? Date.now()
+
+      await dispatch('horses/generatePool', generationSeed, { root: true })
+      await dispatch('race/prepareRace', generationSeed, { root: true })
+    },
+  },
   modules: {
     horses: horsesModule,
     race: raceModule,
