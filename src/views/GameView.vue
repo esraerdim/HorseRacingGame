@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
+
+const HorseListPanel = defineAsyncComponent(
+  () => import('../components/panels/HorseListPanel.vue'),
+)
+const ProgramPanel = defineAsyncComponent(
+  () => import('../components/panels/ProgramPanel.vue'),
+)
+</script>
+
 <template>
   <main class="game-view">
     <header class="game-view__header">
@@ -9,9 +20,7 @@
 
     <section class="game-view__content">
       <aside class="game-view__column game-view__column--left">
-        <div class="placeholder-block">
-          Horse list panel placeholder
-        </div>
+        <HorseListPanel />
       </aside>
 
       <section class="game-view__column game-view__column--center">
@@ -21,8 +30,9 @@
       </section>
 
       <aside class="game-view__column game-view__column--right">
+        <ProgramPanel />
         <div class="placeholder-block">
-          Program and results panels placeholder
+          Results panel placeholder
         </div>
       </aside>
     </section>
