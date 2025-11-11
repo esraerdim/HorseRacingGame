@@ -9,7 +9,9 @@ export interface RootState {
 }
 
 interface GenerateRaceProgramPayload {
-  seed?: number
+  scheduleSeed?: number
+  regenerateHorses?: boolean
+  horseSeed?: number
 }
 
 export const store = createStore<RootState>({
@@ -26,13 +28,19 @@ export const store = createStore<RootState>({
   },
   actions: {
     async generateRaceProgram(
-      { dispatch },
+      { dispatch, rootState },
       payload: GenerateRaceProgramPayload = {},
     ) {
-      const generationSeed = payload.seed ?? Date.now()
+      const shouldGenerateHorses =
+        payload.regenerateHorses === true || rootState.horses.pool.length === 0
 
-      await dispatch('horses/generatePool', generationSeed, { root: true })
-      await dispatch('race/prepareRace', generationSeed, { root: true })
+      if (shouldGenerateHorses) {
+        const horseSeed = payload.horseSeed ?? Date.now()
+        await dispatch('horses/generatePool', horseSeed, { root: true })
+      }
+
+      const scheduleSeed = payload.scheduleSeed ?? Date.now()
+      await dispatch('race/prepareRace', scheduleSeed, { root: true })
     },
   },
   modules: {

@@ -6,3 +6,23 @@ declare module '*.vue' {
   export default component
 }
 
+declare module '*.gif' {
+  const src: string
+  export default src
+}
+
+declare module '@/assets/*.gif' {
+  const src: string
+  export default src
+}
+
+declare module '*.gif?url' {
+  const src: string
+  export default src
+}
+
+declare module '@/assets/*.gif?url' {
+  const src: string
+  export default src
+}
+

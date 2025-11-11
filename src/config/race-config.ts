@@ -25,7 +25,7 @@ export const HORSE_NAMES = [
   'Cinder Strike',
   'Moonlit Mirage',
   'Bronze Bolt',
-  'Whirlwind Wonder',
+  'Whirl Wonder',
   'Ivory Ignition',
   'Scarlet Spirit',
   'Thunder Trail',
