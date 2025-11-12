@@ -15,9 +15,10 @@ interface GenerateRaceProgramPayload {
 }
 
 export const store = createStore<RootState>({
-  state: {
-    version: '0.1.0',
-  },
+  state: () =>
+    ({
+      version: '0.1.0',
+    } as RootState),
   getters: {
     appVersion: (state: RootState) => state.version,
   },

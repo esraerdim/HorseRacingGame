@@ -22,42 +22,28 @@ watch(
 )
 
 const HorseListPanel = defineAsyncComponent(
-  () => import('../components/panels/HorseListPanel.vue'),
+  () => import('../components/sections/HorseListPanel.vue'),
 )
 const ControlsPanel = defineAsyncComponent(
-  () => import('../components/controls/Controls.vue'),
+  () => import('../components/sections/Controls.vue'),
 )
 const ProgramResultsPanel = defineAsyncComponent(
-  () => import('../components/panels/ProgramResultsPanel.vue'),
+  () => import('../components/sections/ProgramResultsPanel.vue'),
 )
 const LiveBoardPanel = defineAsyncComponent(
-  () => import('../components/panels/LiveBoardPanel.vue'),
+  () => import('../components/sections/LiveBoardPanel.vue'),
 )
 const RaceTrack = defineAsyncComponent(
-  () => import('../components/race/RaceTrack.vue'),
+  () => import('../components/sections/RaceTrack.vue'),
 )
 </script>
 
 <template>
   <main class="game-view">
     <header class="game-view__header">
-      <h1>Horse Racing Game</h1>
-      <p class="game-view__subtitle">
-        Generate a six-round program and watch the horses race to the finish.
-      </p>
-    </header>
-
-    <section class="game-view__content">
-      <aside class="game-view__column game-view__column--left">
-        <HorseListPanel />
-      </aside>
-
-      <section class="game-view__column game-view__column--center">
-        <ControlsPanel />
-        <RaceTrack class="game-view__track" />
-      </section>
-
-      <aside class="game-view__column game-view__column--right">
+      <h1 class="game-view__title">Horse Racing Game</h1>
+      <div class="game-view__header-actions">
+        <ControlsPanel class="game-view__controls" />
         <button
           class="game-view__toggle"
           type="button"
@@ -67,6 +53,19 @@ const RaceTrack = defineAsyncComponent(
           <span v-if="liveBoardVisible">Hide Live Results</span>
           <span v-else>Show Live Results</span>
         </button>
+      </div>
+    </header>
+
+    <section class="game-view__content">
+      <aside class="game-view__column game-view__column--left">
+        <HorseListPanel />
+      </aside>
+
+      <section class="game-view__column game-view__column--center">
+        <RaceTrack class="game-view__track" />
+      </section>
+
+      <aside class="game-view__column game-view__column--right">
         <LiveBoardPanel v-show="liveBoardVisible" />
         <ProgramResultsPanel />
       </aside>
@@ -79,32 +78,45 @@ const RaceTrack = defineAsyncComponent(
   display: flex;
   flex-direction: column;
   height: 100vh;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, #f9fafb 0%, #edf2fb 100%);
+  gap: 0.6rem;
+  padding: 0.3rem 1rem 1.3rem;
+  background: radial-gradient(circle at top center, #eef2ff 0%, #e2e8f0 40%, #d9e2ec 100%);
   overflow: hidden;
 }
 
 .game-view__header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  background: rgba(249, 250, 252, 0.94);
+  border-radius: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  margin: 0.1rem 0;
+  box-shadow:
+    0 16px 26px rgba(15, 23, 42, 0.09),
+    0 2px 8px rgba(15, 23, 42, 0.05);
 }
 
-.game-view__header h1 {
-  font-size: clamp(2rem, 3vw, 2.5rem);
+.game-view__title {
+  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
   font-weight: 600;
   color: #1f2937;
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
-.game-view__subtitle {
-  margin-top: 0.25rem;
-  color: #4b5563;
-  font-size: 1rem;
+.game-view__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
 }
 
 .game-view__content {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 2.4fr 1.1fr;
+  gap: 1rem;
   flex: 1;
   min-height: 0;
   height: 100%;
@@ -113,34 +125,37 @@ const RaceTrack = defineAsyncComponent(
 .game-view__column {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.9rem;
   min-height: 0;
   height: 100%;
 }
 
-.game-view__column--left,
-.game-view__column--right {
+.game-view__column--left {
   overflow: auto;
   padding-right: 0.2rem;
 }
 
+.game-view__controls {
+  display: flex;
+}
+
 .game-view__toggle {
   appearance: none;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  background: rgba(248, 250, 252, 0.9);
-  color: #1f2937;
-  border-radius: 0.75rem;
-  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(255, 255, 255, 0.95);
+  color: #312e81;
+  border-radius: 0.55rem;
+  padding: 0.28rem 0.6rem;
   font-weight: 600;
-  font-size: 0.85rem;
-  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: background 0.2s ease, box-shadow 0.2s ease;
+  min-width: 7.5rem;
 }
 
 .game-view__toggle:hover:enabled {
   background: rgba(79, 70, 229, 0.08);
-  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.08);
+  box-shadow: 0 6px 12px rgba(79, 70, 229, 0.12);
 }
 
 .game-view__toggle:disabled {
@@ -168,6 +183,18 @@ const RaceTrack = defineAsyncComponent(
 }
 
 @media (max-width: 1024px) {
+  .game-view__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.45rem 0.3rem;
+  }
+
+  .game-view__header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
   .game-view__content {
     grid-template-columns: 1fr;
   }

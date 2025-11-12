@@ -8,6 +8,14 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "composite": true,
+    "noEmit": false,
+    "declaration": true,
+    "declarationDir": "./node_modules/.tmp/types",
+    "emitDeclarationOnly": true,
+    "allowImportingTsExtensions": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
