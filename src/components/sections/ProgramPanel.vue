@@ -12,10 +12,11 @@
       Program is empty. Generate a roster to build the race schedule.
     </AppEmptyState>
 
-    <ul v-else class="program-panel__rounds">
+    <ul v-else ref="roundsList" class="program-panel__rounds">
       <ProgramRoundCard
         v-for="round in programRounds"
         :key="round.roundNumber"
+        :data-round="round.roundNumber"
         :index="round.roundNumber"
         :title="formatLap(round.roundNumber)"
         :distance="round.distance"
@@ -27,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import type { Horse, RaceRound } from '@/types'
 import type { RootState } from '@/store'
@@ -37,6 +38,7 @@ import { ProgramRoundCard } from '@/components/compounds'
 type ProgramRound = RaceRound & { horseNames: string[] }
 
 const store = useStore<RootState>()
+const roundsList = ref<HTMLUListElement | null>(null)
 
 const formatLap = (roundNumber: number) => {
   const remainder = roundNumber % 100
@@ -74,6 +76,14 @@ const programRounds = computed<ProgramRound[]>(() =>
 
 const isActiveRound = (roundNumber: number) =>
   roundNumber === currentRoundIndex.value + 1
+
+watch(currentRoundIndex, async (idx) => {
+  await nextTick()
+  const targetRound = roundsList.value?.querySelector<HTMLElement>(
+    `[data-round="${idx + 1}"]`,
+  )
+  targetRound?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+})
 </script>
 
 <style scoped>

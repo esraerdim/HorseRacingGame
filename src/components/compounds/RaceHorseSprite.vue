@@ -1,5 +1,9 @@
 <template>
-  <div class="race-horse-wrapper" :style="wrapperStyle">
+  <div
+    class="race-horse-wrapper"
+    :class="wrapperClasses"
+    :style="wrapperStyle"
+  >
     <div
       class="race-horse"
       :class="horseClasses"
@@ -37,11 +41,17 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const isRunning = computed(() => props.running && !props.finished)
+
     const horseClasses = computed(() => ({
-      'race-horse--running': props.running && !props.finished,
-      'race-horse--idle': !props.running || props.finished,
+      'race-horse--running': isRunning.value,
+      'race-horse--idle': !isRunning.value,
       'race-horse--paused': props.paused,
       'race-horse--finished': props.finished,
+    }))
+
+    const wrapperClasses = computed(() => ({
+      'race-horse-wrapper--running': isRunning.value,
     }))
 
     const wrapperStyle = computed(() => ({
@@ -50,6 +60,7 @@ export default defineComponent({
 
     return {
       horseClasses,
+      wrapperClasses,
       wrapperStyle,
     }
   },
@@ -60,15 +71,29 @@ export default defineComponent({
 .race-horse-wrapper {
   position: absolute;
   top: 50%;
-  left: calc(2.25rem + (100% - 3.1rem) * var(--progress, 0));
+  left: calc(2.25rem + (100% - 4.4rem) * var(--progress, 0));
   transform: translate(-50%, -50%);
-  transition: left 0.18s linear;
+  transition: left 0.12s linear;
   z-index: 1;
 }
 
+.race-horse-wrapper--running {
+  animation: horse-bob 0.26s ease-in-out infinite alternate;
+  animation-delay: calc((var(--progress, 0) * 0.18s));
+}
+
+@keyframes horse-bob {
+  from {
+    transform: translate(-50%, -53%) scale(1.04) rotate(-0.8deg);
+  }
+  to {
+    transform: translate(-50%, -47.5%) scale(0.96) rotate(0.8deg);
+  }
+}
+
 .race-horse {
-  width: 3.9rem;
-  height: 3.4rem;
+  width: 4.6rem;
+  height: 3.9rem;
   position: relative;
   background-color: var(--horse-color, #4f46e5);
   mask-image: url('@/assets/horse_idle.gif');
@@ -79,7 +104,9 @@ export default defineComponent({
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
-  filter: drop-shadow(0 1px 3px rgba(15, 23, 42, 0.18));
+  filter:
+    drop-shadow(0 0.22rem 0.45rem rgba(15, 23, 42, 0.1))
+    drop-shadow(0 0.6rem 1.2rem rgba(49, 46, 129, 0.18));
 }
 
 .race-horse::after {
@@ -91,25 +118,35 @@ export default defineComponent({
   background-position: center;
   background-size: contain;
   mix-blend-mode: multiply;
-  opacity: 0.55;
+  opacity: 0.18;
   pointer-events: none;
 }
 
 .race-horse--running::after {
   background-image: url('@/assets/horse.gif');
-  opacity: 0.65;
+  opacity: 0.26;
 }
 
 .race-horse--running {
   mask-image: url('@/assets/horse.gif');
   -webkit-mask-image: url('@/assets/horse.gif');
+  animation: horse-stride 0.18s ease-in-out infinite alternate;
+}
+
+@keyframes horse-stride {
+  from {
+    transform: scaleX(1.04) translateY(-1.3px);
+  }
+  to {
+    transform: scaleX(0.96) translateY(1.3px);
+  }
 }
 
 .race-horse--paused::after,
 .race-horse--finished::after,
 .race-horse--idle::after {
   background-image: url('@/assets/horse_idle.gif');
-  opacity: 0.55;
+  opacity: 0.18;
 }
 </style>
 

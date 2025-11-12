@@ -87,9 +87,9 @@ const orderedHorses = computed(() => horses.value)
 }
 
 .horse-list-panel__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
   list-style: none;
   margin: 0;
   padding: 0 0.15rem 0 0;

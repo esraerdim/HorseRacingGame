@@ -85,7 +85,7 @@ export default defineComponent({
 .race-track-lane__track {
   position: relative;
   height: 100%;
-  min-height: 2.3rem;
+  min-height: 3.1rem;
   flex: 1;
   padding: 0 1.9rem 0.06rem 1.9rem;
   display: flex;

@@ -75,7 +75,7 @@ const ResultsPanel = defineAsyncComponent(
     box-shadow 0.2s ease;
 }
 
-.program-results__tab:hover {
+.program-results__tab:hover:not(.program-results__tab--active) {
   background: rgba(79, 70, 229, 0.08);
   color: #312e81;
 }

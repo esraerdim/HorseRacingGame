@@ -15,7 +15,7 @@ watch(
       liveBoardVisible.value = true
     }
     if (status === 'finished') {
-      liveBoardVisible.value = true
+      liveBoardVisible.value = false
     }
   },
   { immediate: true },
