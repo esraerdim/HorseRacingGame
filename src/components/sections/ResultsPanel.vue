@@ -1,12 +1,11 @@
 <template>
-  <AppPanel class="results-panel">
-    <AppSectionHeader title="Race Results">
-      <template #meta>
-        <span class="results-panel__meta">
-          {{ results.length }} rounds completed
-        </span>
-      </template>
-    </AppSectionHeader>
+  <section class="results-panel">
+    <header class="results-panel__header">
+      <h2>Race Results</h2>
+      <span class="results-panel__meta">
+        {{ results.length }} rounds completed
+      </span>
+    </header>
 
     <AppEmptyState v-if="!results.length">
       No results yet. Start the race to populate this view.
@@ -22,7 +21,7 @@
         :entries="round.entries"
       />
     </ul>
-  </AppPanel>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -30,7 +29,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import type { Horse, RaceRoundResult } from '@/types'
 import type { RootState } from '@/store'
-import { AppPanel, AppSectionHeader, AppEmptyState } from '@/components/primitives'
+import { AppEmptyState } from '@/components/primitives'
 import { ResultRoundCard } from '@/components/compounds'
 type EnrichedResult = RaceRoundResult & {
   distance: number
@@ -88,6 +87,25 @@ const results = computed<EnrichedResult[]>(() => {
   gap: 1rem;
   height: 100%;
   min-height: 0;
+}
+
+.results-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.results-panel__header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.results-panel__meta {
+  font-size: 0.9rem;
+  color: #64748b;
 }
 
 .results-panel__rounds {

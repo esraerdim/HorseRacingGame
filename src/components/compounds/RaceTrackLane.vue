@@ -67,19 +67,27 @@ export default defineComponent({
 .race-track-lane {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.15rem 0.6rem 0.15rem 0.38rem;
+  gap: 0.6rem;
+  padding: 0.15rem 0.6rem 0.15rem 0.4rem;
   position: relative;
 }
 
 .race-track-lane__number {
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    0 6px 12px rgba(15, 23, 42, 0.12);
   font-weight: 700;
+  font-size: 0.85rem;
   color: #1f2937;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  height: 100%;
-  width: 2rem;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .race-track-lane__track {
@@ -91,7 +99,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px dashed rgba(148, 163, 184, 0.45);
+  border-bottom: 1px dashed rgb(231 239 251 / 45%);
   z-index: 1;
 }
 

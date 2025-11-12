@@ -77,7 +77,6 @@ export default defineComponent({
 
 .program-round-card--active {
   border-color: rgba(79, 70, 229, 0.6);
-  box-shadow: 0 12px 18px rgba(79, 70, 229, 0.12);
 }
 
 .program-round-card__header {

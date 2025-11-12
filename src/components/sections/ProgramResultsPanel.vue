@@ -13,7 +13,7 @@ const ResultsPanel = defineAsyncComponent(
 </script>
 
 <template>
-  <AppPanel class="program-results" padding="1.25rem">
+  <section class="program-results">
     <header class="program-results__tabs">
       <button
         type="button"
@@ -37,7 +37,7 @@ const ResultsPanel = defineAsyncComponent(
       <ProgramPanel v-if="activeTab === 'program'" />
       <ResultsPanel v-else />
     </div>
-  </AppPanel>
+  </section>
 </template>
 
 <style scoped>
@@ -45,8 +45,14 @@ const ResultsPanel = defineAsyncComponent(
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1.25rem;
   flex: 1;
   min-height: 0;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 1.1rem;
+  box-shadow:
+    0 18px 30px rgba(15, 23, 42, 0.08),
+    0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
 .program-results__tabs {
@@ -90,5 +96,7 @@ const ResultsPanel = defineAsyncComponent(
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 </style>

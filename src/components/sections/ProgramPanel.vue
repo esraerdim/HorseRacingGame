@@ -1,12 +1,11 @@
 <template>
-  <AppPanel class="program-panel">
-    <AppSectionHeader title="Race Program">
-      <template #meta>
-        <span class="program-panel__meta">
-          {{ programRounds.length }} rounds scheduled
-        </span>
-      </template>
-    </AppSectionHeader>
+  <section class="program-panel">
+    <header class="program-panel__header">
+      <h2>Race Program</h2>
+      <span class="program-panel__meta">
+        {{ programRounds.length }} rounds scheduled
+      </span>
+    </header>
 
     <AppEmptyState v-if="!programRounds.length">
       Program is empty. Generate a roster to build the race schedule.
@@ -24,7 +23,7 @@
         :active="isActiveRound(round.roundNumber)"
       />
     </ul>
-  </AppPanel>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -32,7 +31,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import type { Horse, RaceRound } from '@/types'
 import type { RootState } from '@/store'
-import { AppPanel, AppSectionHeader, AppEmptyState } from '@/components/primitives'
+import { AppEmptyState } from '@/components/primitives'
 import { ProgramRoundCard } from '@/components/compounds'
 
 type ProgramRound = RaceRound & { horseNames: string[] }
@@ -93,6 +92,25 @@ watch(currentRoundIndex, async (idx) => {
   gap: 1rem;
   height: 100%;
   min-height: 0;
+}
+
+.program-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.program-panel__header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.program-panel__meta {
+  font-size: 0.9rem;
+  color: #64748b;
 }
 
 .program-panel__rounds {
