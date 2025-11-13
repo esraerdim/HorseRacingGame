@@ -108,4 +108,5 @@ The repo ships with GitHub Pages automation.
   npm run deploy
   ```
   The command builds the project and publishes the `dist/` folder to the `gh-pages` branch via the `gh-pages` CLI.
+  Live:https://esraerdim.github.io/HorseRacingGame/
 
