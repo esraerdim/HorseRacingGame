@@ -263,10 +263,11 @@ const countdownStrokeDashoffset = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-    width: clamp(200px, 22vw, 260px);
+  width: clamp(200px, 20vw, 235px);
   aspect-ratio: 1/1;
   position: relative;
-  padding: 1.4rem;
+  padding: 1.2rem;
+  transform: translateY(38%);
 }
 
 .race-track__countdown-svg {
@@ -295,29 +296,30 @@ const countdownStrokeDashoffset = computed(() => {
   align-items: center;
   gap: 0.15rem;
   text-align: center;
-  color: #e2e8f0;
+  color: #330f36;
   text-transform: uppercase;
+  font-weight: 700;
   letter-spacing: 0.08em;
   padding: 0;
 }
 
 .race-track__countdown-label {
-  font-size: clamp(0.62rem, 1vw, 0.74rem);
-  font-weight: 500;
+  font-size: clamp(1.0rem, 1vw, 0.74rem);
+  font-weight: 700;
   letter-spacing: 0.08em;
 }
 
 .race-track__countdown-value {
   font-size: clamp(2.4rem, 4.2vw, 3rem);
-  font-weight: 600;
-  color: #f8fafc;
+  font-weight: 700;
+  color: #ffffff;
   letter-spacing: 0.1em;
 }
 
 .race-track__countdown-label-secondary {
   font-size: clamp(0.6rem, 1vw, 0.75rem);
-  font-weight: 500;
-  opacity: 0.85;
+  font-weight: 600;
+  color:  #330f36;
 }
 
 @media (max-width: 1024px) {
