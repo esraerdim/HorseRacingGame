@@ -6,8 +6,17 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "vuex": ["./node_modules/vuex/types/index.d.ts"]
     },
+    "composite": true,
+    "noEmit": false,
+    "declaration": true,
+    "declarationDir": "./node_modules/.tmp/types",
+    "emitDeclarationOnly": true,
+    "allowImportingTsExtensions": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,

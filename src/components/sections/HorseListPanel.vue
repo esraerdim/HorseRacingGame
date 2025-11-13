@@ -1,5 +1,5 @@
 <template>
-  <section class="horse-list-panel">
+  <AppPanel class="horse-list-panel" padding="1.25rem">
     <header class="horse-list-panel__header">
       <h2>Horse Roster</h2>
       <span class="horse-list-panel__meta">
@@ -12,44 +12,32 @@
       <span>Generating horse pool…</span>
     </div>
     <ul v-else class="horse-list-panel__grid">
-      <li
-        v-for="horse in horses"
-        :key="horse.id"
-        class="horse-card"
-      >
-        <span
-          class="horse-card__swatch"
-          :style="{ backgroundColor: horse.color }"
-          aria-hidden="true"
-        />
-        <div class="horse-card__meta">
-          <span class="horse-card__name">{{ horse.name }}</span>
-          <span class="horse-card__stats">Condition: {{ horse.condition }}</span>
-        </div>
-      </li>
+      <HorseCard v-for="horse in orderedHorses" :key="horse.id" :horse="horse" />
     </ul>
 
     <p v-if="!horses.length && !isGenerating" class="horse-list-panel__empty">
       No horses have been generated yet. Click Generate to build the roster.
     </p>
-  </section>
+  </AppPanel>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import type { Horse } from '../../types'
-import type { RootState } from '../../store'
+import type { Horse } from '@/types'
+import type { RootState } from '@/store'
+import AppPanel from '@/components/base/AppPanel.vue'
+import HorseCard from '@/components/widgets/HorseCard.vue'
 
 const store = useStore<RootState>()
 
-const horses = computed(
-  () => store.getters['horses/horsePool'] as Horse[],
-)
+const horses = computed(() => store.getters['horses/horsePool'] as Horse[])
 const totalHorses = computed(() => store.getters['horses/horseCount'] as number)
 const isGenerating = computed(
   () => store.getters['horses/isGenerating'] as boolean,
 )
+
+const orderedHorses = computed(() => horses.value)
 </script>
 
 <style scoped>
@@ -57,12 +45,9 @@ const isGenerating = computed(
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.25rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow:
-    0 12px 24px rgba(15, 23, 42, 0.08),
-    0 2px 6px rgba(15, 23, 42, 0.05);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .horse-list-panel__header {
@@ -88,6 +73,8 @@ const isGenerating = computed(
   gap: 0.75rem;
   font-size: 0.95rem;
   color: #374151;
+  flex: 1;
+  justify-content: center;
 }
 
 .horse-list-panel__spinner {
@@ -100,50 +87,19 @@ const isGenerating = computed(
 }
 
 .horse-list-panel__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.75rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.horse-card {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  background: rgba(248, 250, 252, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-}
-
-.horse-card__swatch {
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.12);
-}
-
-.horse-card__meta {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-}
-
-.horse-card__name {
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.horse-card__stats {
-  font-size: 0.8rem;
-  color: #6b7280;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0.15rem 0 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .horse-list-panel__empty {
-  margin: 0;
+  margin: auto 0 0;
   font-size: 0.9rem;
   color: #6b7280;
   text-align: center;

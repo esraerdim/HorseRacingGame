@@ -9,13 +9,16 @@ export interface RootState {
 }
 
 interface GenerateRaceProgramPayload {
-  seed?: number
+  scheduleSeed?: number
+  regenerateHorses?: boolean
+  horseSeed?: number
 }
 
 export const store = createStore<RootState>({
-  state: {
-    version: '0.1.0',
-  },
+  state: () =>
+    ({
+      version: '0.1.0',
+    } as RootState),
   getters: {
     appVersion: (state: RootState) => state.version,
   },
@@ -26,13 +29,19 @@ export const store = createStore<RootState>({
   },
   actions: {
     async generateRaceProgram(
-      { dispatch },
+      { dispatch, rootState },
       payload: GenerateRaceProgramPayload = {},
     ) {
-      const generationSeed = payload.seed ?? Date.now()
+      const shouldGenerateHorses =
+        payload.regenerateHorses === true || rootState.horses.pool.length === 0
 
-      await dispatch('horses/generatePool', generationSeed, { root: true })
-      await dispatch('race/prepareRace', generationSeed, { root: true })
+      if (shouldGenerateHorses) {
+        const horseSeed = payload.horseSeed ?? Date.now()
+        await dispatch('horses/generatePool', horseSeed, { root: true })
+      }
+
+      const scheduleSeed = payload.scheduleSeed ?? Date.now()
+      await dispatch('race/prepareRace', scheduleSeed, { root: true })
     },
   },
   modules: {
@@ -40,6 +49,11 @@ export const store = createStore<RootState>({
     race: raceModule,
   },
 })
+
+if (typeof window !== 'undefined') {
+  ;(window as unknown as { __HORSE_RACING_STORE__?: typeof store }).__HORSE_RACING_STORE__ =
+    store
+}
 
 export default store
 

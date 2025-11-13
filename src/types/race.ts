@@ -15,5 +15,12 @@ export interface RaceRoundResult {
   entries: RaceResultEntry[]
 }
 
-export type RaceStatus = 'idle' | 'ready' | 'running' | 'paused' | 'finished'
+export type RaceStatus =
+  | 'idle'
+  | 'ready'
+  | 'running'
+  | 'paused'
+  | 'countdown'
+  | 'awaiting'
+  | 'finished'
 

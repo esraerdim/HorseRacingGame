@@ -1,7 +1,7 @@
 <template>
-  <GameView />
+  <Game />
 </template>
 
 <script setup lang="ts">
-import GameView from './views/GameView.vue'
+import Game from '@/pages/Game.vue'
 </script>

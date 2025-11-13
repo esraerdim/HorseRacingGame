@@ -1,13 +1,9 @@
 import type { Module } from 'vuex'
 import type { RootState } from '../index'
 import type { Horse } from '@/types'
-import {
-  CONDITION_RANGE,
-  HORSE_NAMES,
-  TOTAL_HORSES,
-} from '@/config/race-config'
-import { SeededRandom, DEFAULT_SEED } from '@/utils/random'
-import { generateDistinctColorPalette } from '@/utils/colors'
+import { CONDITION_RANGE, HORSE_NAMES, TOTAL_HORSES } from '@/shared/config/race'
+import { SeededRandom, DEFAULT_SEED } from '@/shared/utils/random'
+import { generateVisuallyDistinctPalette } from '@/shared/utils/colors'
 
 export interface HorsesState {
   pool: Horse[]
@@ -52,15 +48,17 @@ export const horsesModule: Module<HorsesState, RootState> = {
       try {
         const resolvedSeed = seed ?? Date.now()
         const rng = new SeededRandom(resolvedSeed)
-
-        const colorSeed = Math.floor(rng.next() * 1_000_000)
-        const colors = generateDistinctColorPalette(TOTAL_HORSES, {
-          seed: colorSeed,
-        })
-
-        const namePool =
+    
+        const colors = generateVisuallyDistinctPalette(TOTAL_HORSES, resolvedSeed)
+    
+        for (let i = colors.length - 1; i > 0; i--) {
+          const j = rng.nextInt(0, i)
+          ;[colors[i]!, colors[j]!] = [colors[j]!, colors[i]!]
+        }
+    
+        const namePool: string[] =
           HORSE_NAMES.length >= TOTAL_HORSES
-            ? HORSE_NAMES
+            ? [...HORSE_NAMES]
             : [
                 ...HORSE_NAMES,
                 ...Array.from(
@@ -68,25 +66,24 @@ export const horsesModule: Module<HorsesState, RootState> = {
                   (_, idx) => `Horse ${HORSE_NAMES.length + idx + 1}`,
                 ),
               ]
-
+    
         const horses: Horse[] = namePool.slice(0, TOTAL_HORSES).map(
           (name, index) => ({
             id: index + 1,
             name,
-            color:
-              colors[index] ??
-              `hsl(${Math.round((index / TOTAL_HORSES) * 360)}, 70%, 50%)`,
+            color: colors[index]!,
             condition: rng.nextInt(CONDITION_RANGE.min, CONDITION_RANGE.max),
           }),
         )
-
+    
         commit('setPool', horses)
         commit('setSeed', resolvedSeed)
         return horses
       } finally {
         commit('setGenerating', false)
       }
-    },
+    }
+    
   },
 }
 
