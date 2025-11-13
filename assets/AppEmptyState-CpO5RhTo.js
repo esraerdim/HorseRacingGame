@@ -1,1 +1,0 @@
-/* empty css                                                                         */import{_ as t,e as s,o as a,j as o}from"./index-Org9lGqP.js";const c={},n={class:"app-empty-state"};function r(e,p){return a(),s("div",n,[o(e.$slots,"default",{},void 0)])}const f=t(c,[["render",r],["__scopeId","data-v-f32a94a4"]]);export{f as A};
