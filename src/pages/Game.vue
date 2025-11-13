@@ -1,8 +1,17 @@
 <script lang="ts">
-import { defineAsyncComponent, defineComponent, onMounted, ref, watch } from 'vue'
+import {
+  defineAsyncComponent,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  computed,
+} from 'vue'
 import { useStore } from 'vuex'
 import type { RootState } from '@/store'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import AppButton from '@/components/base/AppButton.vue'
 
 const HorseListPanel = defineAsyncComponent(
   () => import('@/components/sections/HorseListPanel.vue'),
@@ -23,6 +32,7 @@ export default defineComponent({
   name: 'Game',
   components: {
     DefaultLayout,
+    AppButton,
     HorseListPanel,
     ControlsPanel,
     ProgramResultsPanel,
@@ -32,6 +42,15 @@ export default defineComponent({
   setup() {
     const store = useStore<RootState>()
     const liveBoardVisible = ref(false)
+    const isMobile = ref(false)
+
+    const updateIsMobile = () => {
+      if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+        isMobile.value = false
+        return
+      }
+      isMobile.value = window.matchMedia('(max-width: 768px)').matches
+    }
 
     watch(
       () => store.state.race.status,
@@ -52,15 +71,29 @@ export default defineComponent({
       { immediate: true },
     )
 
+    const showLiveBoard = computed(() => !isMobile.value && liveBoardVisible.value)
+
     onMounted(() => {
+      updateIsMobile()
+      if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+        window.addEventListener('resize', updateIsMobile, { passive: true })
+      }
       if (!store.state.horses.pool.length) {
         store.dispatch('horses/generatePool')
+      }
+    })
+
+    onBeforeUnmount(() => {
+      if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') {
+        window.removeEventListener('resize', updateIsMobile)
       }
     })
 
     return {
       store,
       liveBoardVisible,
+      isMobile,
+      showLiveBoard,
     }
   },
 })
@@ -73,15 +106,16 @@ export default defineComponent({
         <h1 class="game-page__title">Horse Racing Game</h1>
         <div class="game-page__header-actions">
           <ControlsPanel class="game-page__controls" />
-          <button
+          <AppButton
+            v-if="!isMobile"
+            size="xs"
             class="game-page__toggle"
-            type="button"
-            :disabled="store.state.race.status === 'idle'"
             @click="liveBoardVisible = !liveBoardVisible"
+            :disabled="store.state.race.status === 'idle'"
           >
             <span v-if="liveBoardVisible">Hide Live Results</span>
             <span v-else>Show Live Results</span>
-          </button>
+          </AppButton>
         </div>
       </header>
     </template>
@@ -96,7 +130,7 @@ export default defineComponent({
       </section>
 
       <aside class="game-page__column game-page__column--right">
-        <LiveBoardPanel v-show="liveBoardVisible" />
+        <LiveBoardPanel v-if="showLiveBoard" />
         <ProgramResultsPanel />
       </aside>
     </section>
@@ -128,7 +162,12 @@ export default defineComponent({
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.game-page__header-actions > * {
+  flex: 0 0 auto;
 }
 
 .game-page__controls {
@@ -141,12 +180,15 @@ export default defineComponent({
   background: rgba(255, 255, 255, 0.95);
   color: #312e81;
   border-radius: var(--radius-sm);
-  padding: 0.28rem 0.6rem;
+  padding: 0.32rem 0.7rem;
   font-weight: 600;
   font-size: 0.75rem;
   cursor: pointer;
   transition: background 0.2s ease, box-shadow 0.2s ease;
   min-width: 7.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-page__toggle:hover:enabled {
@@ -205,6 +247,16 @@ export default defineComponent({
 
   .game-page__content {
     grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .game-page__column {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .game-page__column + .game-page__column {
+    margin-top: 1rem;
   }
 }
 </style>

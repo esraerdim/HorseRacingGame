@@ -10,10 +10,9 @@
       <span v-else>Generate</span>
     </AppButton>
     <AppButton
+      v-if="hasSchedule"
       size="xs"
-      :disabled="
-        !hasSchedule || raceStatus === 'finished' || (raceStatus === 'ready' && !hasSchedule)
-      "
+      :disabled="raceStatus === 'finished'"
       @click="handleStartPause"
     >
       {{ startPauseLabel }}
@@ -62,12 +61,12 @@ const handleStartPause = () => {
 </script>
 <style scoped>
 .controls {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   justify-content: flex-start;
   padding: 0.1rem 0;
-  width: auto;
+  flex-wrap: nowrap;
 }
 </style>
 

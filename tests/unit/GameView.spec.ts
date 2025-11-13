@@ -66,9 +66,8 @@ describe('Game', () => {
     const toggle = wrapper.get('.game-page__toggle')
     expect(toggle.attributes('disabled')).toBeDefined()
 
-    const liveBoard = wrapper.get('.live-board-stub')
-    expect(liveBoard.element instanceof HTMLElement).toBe(true)
-    expect((liveBoard.element as HTMLElement).style.display).toBe('none')
+    const liveBoard = wrapper.find('.live-board-stub')
+    expect(liveBoard.exists()).toBe(false)
   })
 
   it('automatically shows live results when race starts running', async () => {
@@ -90,8 +89,8 @@ describe('Game', () => {
     })
     await flushPromises()
 
-    const liveBoard = wrapper.get('.live-board-stub')
-    expect((liveBoard.element as HTMLElement).style.display).not.toBe('none')
+    const liveBoard = wrapper.find('.live-board-stub')
+    expect(liveBoard.exists()).toBe(true)
   })
 
   it('toggles live results visibility when button is clicked', async () => {
@@ -116,16 +115,16 @@ describe('Game', () => {
     const toggle = wrapper.get('.game-page__toggle')
     expect(toggle.attributes('disabled')).toBeUndefined()
 
-    const liveBoard = wrapper.get('.live-board-stub')
-    expect((liveBoard.element as HTMLElement).style.display).toBe('none')
+    const liveBoard = wrapper.find('.live-board-stub')
+    expect(liveBoard.exists()).toBe(false)
 
     await toggle.trigger('click')
     await flushPromises()
-    expect((liveBoard.element as HTMLElement).style.display).not.toBe('none')
+    expect(wrapper.find('.live-board-stub').exists()).toBe(true)
 
     await toggle.trigger('click')
     await flushPromises()
-    expect((liveBoard.element as HTMLElement).style.display).toBe('none')
+    expect(wrapper.find('.live-board-stub').exists()).toBe(false)
   })
 })
 
