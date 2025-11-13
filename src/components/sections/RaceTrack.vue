@@ -295,7 +295,7 @@ const countdownStrokeDashoffset = computed(() => {
   align-items: center;
   gap: 0.15rem;
   text-align: center;
-  color: #e2e8f0;
+  color: #0f172a;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0;
@@ -310,14 +310,14 @@ const countdownStrokeDashoffset = computed(() => {
 .race-track__countdown-value {
   font-size: clamp(2.4rem, 4.2vw, 3rem);
   font-weight: 600;
-  color: #f8fafc;
+  color: #111827;
   letter-spacing: 0.1em;
 }
 
 .race-track__countdown-label-secondary {
   font-size: clamp(0.6rem, 1vw, 0.75rem);
   font-weight: 500;
-  opacity: 0.85;
+  color: rgba(15, 23, 42, 0.7);
 }
 
 @media (max-width: 1024px) {
