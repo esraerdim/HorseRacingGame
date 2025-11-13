@@ -33,9 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { useLiveBoard } from '@/composables/useLiveBoard'
-import { AppPanel, AppBadge, AppProgressBar } from '@/components/primitives'
-import { LiveBoardEntry } from '@/components/compounds'
+import { useLiveBoard } from '@/shared/hooks/useLiveBoard'
+import { AppPanel, AppBadge, AppProgressBar } from '@/components/base'
+import { LiveBoardEntry } from '@/components/features'
 const {
   activeRound,
   liveEntries,

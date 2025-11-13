@@ -1,6 +1,6 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { RaceRound, RaceRoundResult } from '@/types'
-import { useRaceState } from './useRaceState'
+import { useRaceState } from '@/shared/hooks/useRaceState'
 
 type LiveEntry = {
   id: number

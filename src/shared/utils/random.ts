@@ -8,7 +8,6 @@ export class SeededRandom {
   }
 
   next(): number {
-    // LCG parameters from Numerical Recipes
     const a = 1664525
     const c = 1013904223
     const m = 2 ** 32
@@ -43,4 +42,5 @@ export class SeededRandom {
     return this.shuffle(arr).slice(0, count)
   }
 }
+
 

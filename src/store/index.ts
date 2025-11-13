@@ -50,5 +50,10 @@ export const store = createStore<RootState>({
   },
 })
 
+if (typeof window !== 'undefined') {
+  ;(window as unknown as { __HORSE_RACING_STORE__?: typeof store }).__HORSE_RACING_STORE__ =
+    store
+}
+
 export default store
 

@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
-import AppBadge from '@/components/primitives/AppBadge.vue'
+import AppBadge from '@/components/base/AppBadge.vue'
 
 export default defineComponent({
   name: 'RaceTrackHeader',

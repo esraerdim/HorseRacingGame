@@ -24,7 +24,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import type { RootState } from '@/store'
-import AppButton from '@/components/primitives/AppButton.vue'
+import AppButton from '@/components/base/AppButton.vue'
 
 const store = useStore<RootState>()
 

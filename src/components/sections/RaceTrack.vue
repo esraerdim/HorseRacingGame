@@ -20,17 +20,17 @@
         :style="{ '--lane-count': laneCount }"
       >
         <template v-if="runners.length">
-          <RaceTrackLane
-            v-for="runner in runners"
-            :key="runner.id"
-            :lane-index="runner.laneIndex"
-            :name="runner.name"
-            :progress="runner.trackProgress"
-            :color="runner.color"
-            :running="showAnimatedHorse && !runner.finished"
-            :finished="runner.finished"
-            :paused="isPaused"
-          />
+        <RaceTrackLane
+          v-for="runner in runners"
+          :key="runner.id"
+          :lane-index="runner.laneIndex"
+          :name="runner.name"
+          :progress="runner.trackProgress"
+          :color="runner.color"
+          :running="showAnimatedHorse && !runner.finished"
+          :finished="runner.finished"
+          :paused="isPaused"
+        />
         </template>
         <div v-else class="race-track__placeholder" />
       </div>
@@ -40,9 +40,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRaceTrack } from '@/composables/useRaceTrack'
-import { RaceTrackLane } from '@/components/compounds'
-import { RACE_HORSES_PER_ROUND } from '@/config/race-config'
+import { useRaceTrack } from '@/shared/hooks/useRaceTrack'
+import { RaceTrackLane } from '@/components/features'
+import { RACE_HORSES_PER_ROUND } from '@/shared/config/race'
 import raceAnimation from '@/assets/race_animation.mp4'
 
 const {

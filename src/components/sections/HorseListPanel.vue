@@ -26,8 +26,8 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import type { Horse } from '@/types'
 import type { RootState } from '@/store'
-import AppPanel from '@/components/primitives/AppPanel.vue'
-import HorseCard from '../compounds/HorseCard.vue'
+import AppPanel from '@/components/base/AppPanel.vue'
+import HorseCard from '@/components/features/HorseCard.vue'
 
 const store = useStore<RootState>()
 

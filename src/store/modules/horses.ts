@@ -1,13 +1,9 @@
 import type { Module } from 'vuex'
 import type { RootState } from '../index'
 import type { Horse } from '@/types'
-import {
-  CONDITION_RANGE,
-  HORSE_NAMES,
-  TOTAL_HORSES,
-} from '@/config/race-config'
-import { SeededRandom, DEFAULT_SEED } from '@/utils/random'
-import { generateVisuallyDistinctPalette } from '@/utils/colors'
+import { CONDITION_RANGE, HORSE_NAMES, TOTAL_HORSES } from '@/shared/config/race'
+import { SeededRandom, DEFAULT_SEED } from '@/shared/utils/random'
+import { generateVisuallyDistinctPalette } from '@/shared/utils/colors'
 
 export interface HorsesState {
   pool: Horse[]

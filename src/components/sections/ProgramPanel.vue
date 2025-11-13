@@ -2,9 +2,9 @@
   <section class="program-panel">
     <header class="program-panel__header">
       <h2>Race Program</h2>
-      <span class="program-panel__meta">
-        {{ programRounds.length }} rounds scheduled
-      </span>
+        <span class="program-panel__meta">
+          {{ programRounds.length }} rounds scheduled
+        </span>
     </header>
 
     <AppEmptyState v-if="!programRounds.length">
@@ -31,8 +31,8 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import type { Horse, RaceRound } from '@/types'
 import type { RootState } from '@/store'
-import { AppEmptyState } from '@/components/primitives'
-import { ProgramRoundCard } from '@/components/compounds'
+import { AppEmptyState } from '@/components/base'
+import { ProgramRoundCard } from '@/components/features'
 
 type ProgramRound = RaceRound & { horseNames: string[] }
 

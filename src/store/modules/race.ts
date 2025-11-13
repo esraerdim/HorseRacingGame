@@ -1,8 +1,8 @@
 import type { Module } from 'vuex'
 import type { RootState } from '../index'
 import type { RaceRound, RaceRoundResult, RaceStatus } from '@/types'
-import { generateRaceSchedule, simulateRoundResult } from '@/utils/race'
-import { SeededRandom } from '@/utils/random'
+import { generateRaceSchedule, simulateRoundResult } from '@/shared/utils/race'
+import { SeededRandom } from '@/shared/utils/random'
 
 const ROUND_MIN_DURATION_MS = 3500
 const SEGMENT_COUNT = 4

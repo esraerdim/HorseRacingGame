@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import RaceHorseSprite from '@/components/compounds/RaceHorseSprite.vue'
+import RaceHorseSprite from '@/components/features/RaceHorseSprite.vue'
 
 export default defineComponent({
   name: 'RaceTrackLane',
@@ -106,7 +106,7 @@ export default defineComponent({
 .race-track-lane__label {
   flex: 1;
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
   font-size: 0.82rem;
   pointer-events: none;
   text-align: center;

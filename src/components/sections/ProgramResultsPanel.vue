@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from 'vue'
-import AppPanel from '../primitives/AppPanel.vue'
 
 const activeTab = ref<'program' | 'results'>('program')
 

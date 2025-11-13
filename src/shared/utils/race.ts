@@ -1,9 +1,6 @@
 import type { Horse, RaceRound, RaceRoundResult } from '@/types'
-import {
-  ROUND_DISTANCES,
-  RACE_HORSES_PER_ROUND,
-} from '@/config/race-config'
-import { SeededRandom } from './random'
+import { ROUND_DISTANCES, RACE_HORSES_PER_ROUND } from '@/shared/config/race'
+import { SeededRandom } from '@/shared/utils/random'
 
 export interface ScheduleGenerationInput {
   horses: Horse[]
@@ -56,8 +53,8 @@ export const simulateRoundResult = ({
   const baseTimeMs = assignment.distance * 10
 
   const entries = participants.map((horse) => {
-    const conditionFactor = (horse.condition - 50) / 200 // range [-0.25, 0.25]
-    const randomFactor = (rng.next() - 0.5) * 0.2 // range [-0.1, 0.1]
+    const conditionFactor = (horse.condition - 50) / 200
+    const randomFactor = (rng.next() - 0.5) * 0.2
     const timeMultiplier = 1 - conditionFactor - randomFactor
     const elapsedMs = Math.max(baseTimeMs * timeMultiplier, baseTimeMs * 0.7)
 
@@ -80,4 +77,5 @@ export const simulateRoundResult = ({
     entries: sorted,
   }
 }
+
 

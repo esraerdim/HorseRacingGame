@@ -21,7 +21,7 @@ export const useRaceState = () => {
 
   const horseLookup = computed(() => {
     const map = new Map<number, Horse>()
-  store.state.horses.pool.forEach((horse: Horse) => map.set(horse.id, horse))
+    store.state.horses.pool.forEach((horse: Horse) => map.set(horse.id, horse))
     return map
   })
 

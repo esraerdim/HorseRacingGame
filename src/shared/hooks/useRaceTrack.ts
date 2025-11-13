@@ -1,5 +1,8 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { RaceRound, RaceRoundResult } from '@/types'
+import horseRunningAudio from '@/assets/horse-running.mp3'
+import { useRaceState } from '@/shared/hooks/useRaceState'
+
 type PreviewEntry = RaceRoundResult['entries'][number]
 type TrackRunner = {
   id: number
@@ -10,8 +13,6 @@ type TrackRunner = {
   timeLabel: string
   color: string
 }
-import horseRunningAudio from '@/assets/horse-running.mp3'
-import { useRaceState } from './useRaceState'
 
 const computeSegmentProgress = (
   segments: number[] | undefined,

@@ -43,11 +43,9 @@ export default defineComponent({
 .app-panel {
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 1rem;
-  box-shadow:
-    0 12px 24px rgba(15, 23, 42, 0.08),
-    0 2px 6px rgba(15, 23, 42, 0.05);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   padding: var(--app-panel-padding, 1rem);
 }
 </style>

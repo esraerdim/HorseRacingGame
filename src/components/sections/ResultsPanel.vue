@@ -2,9 +2,9 @@
   <section class="results-panel">
     <header class="results-panel__header">
       <h2>Race Results</h2>
-      <span class="results-panel__meta">
-        {{ results.length }} rounds completed
-      </span>
+        <span class="results-panel__meta">
+          {{ results.length }} rounds completed
+        </span>
     </header>
 
     <AppEmptyState v-if="!results.length">
@@ -29,8 +29,8 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import type { Horse, RaceRoundResult } from '@/types'
 import type { RootState } from '@/store'
-import { AppEmptyState } from '@/components/primitives'
-import { ResultRoundCard } from '@/components/compounds'
+import { AppEmptyState } from '@/components/base'
+import { ResultRoundCard } from '@/components/features'
 type EnrichedResult = RaceRoundResult & {
   distance: number
   entries: Array<

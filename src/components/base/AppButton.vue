@@ -56,9 +56,9 @@ export default defineComponent({
 .app-button {
   appearance: none;
   border: 1px solid rgba(148, 163, 184, 0.25);
-  background: rgba(249, 250, 252, 0.92);
+  background: var(--color-surface);
   color: #312e81;
-  border-radius: 0.55rem;
+  border-radius: var(--radius-sm);
   padding: 0.5rem 0.9rem;
   font-size: 0.88rem;
   font-weight: 600;
@@ -79,14 +79,14 @@ export default defineComponent({
 .app-button--size-sm {
   padding: 0.4rem 0.7rem;
   font-size: 0.82rem;
-  border-radius: 0.5rem;
+  border-radius: calc(var(--radius-sm) - 0.05rem);
   gap: 0.3rem;
 }
 
 .app-button--size-xs {
   padding: 0.32rem 0.6rem;
   font-size: 0.78rem;
-  border-radius: 0.45rem;
+  border-radius: calc(var(--radius-sm) - 0.1rem);
   gap: 0.25rem;
 }
 
@@ -119,14 +119,14 @@ export default defineComponent({
 }
 
 .app-button--primary {
-  background: #4338ca;
-  border-color: rgba(79, 70, 229, 0.4);
-  color: #f9fafb;
-  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.18);
+  background: var(--color-primary);
+  border-color: var(--color-border-strong);
+  color: var(--color-primary-contrast);
+  box-shadow: var(--shadow-sm);
 }
 
 .app-button--primary:hover:enabled {
-  background: #3730a3;
+  background: var(--color-primary-dark);
   box-shadow: 0 10px 20px rgba(79, 70, 229, 0.22);
 }
 
