@@ -3,7 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createStore, type Store } from 'vuex'
 import Controls from '@/components/sections/Controls.vue'
 import { horsesModule, type HorsesState } from '@/store/modules/horses'
-import { raceModule, type RaceState } from '@/store/modules/race'
+import { raceModule, type RaceState, COUNTDOWN_DURATION_MS } from '@/store/modules/race'
 import { DEFAULT_SEED } from '@/shared/utils/random'
 
 type RootStateShape = {
@@ -62,6 +62,9 @@ const createRootStore = (): Store<RootStateShape> =>
             roundCompletedMs: 0,
             currentRoundPreview: null,
             currentRoundSegments: {},
+            roundCountdownMs: null,
+            roundCountdownTimerId: null,
+            roundCountdownTotalMs: null,
           }) as RaceState,
       },
     },
@@ -97,25 +100,22 @@ describe('Race flow integration', () => {
 
     const totalRounds = store.state.race.schedule.length
 
+    await flowButton().trigger('click')
+    await flushPromises()
+    expect(store.state.race.status).toBe('running')
+
     for (let round = 0; round < totalRounds; round += 1) {
-      await flowButton().trigger('click') // Start, Pause/Resume/Next Lap depending on state
-      await flushPromises()
-
-      if (round === 0) {
-        expect(store.state.race.status).toBe('running')
-      }
-
-      vi.runOnlyPendingTimers()
+      const duration = store.state.race.roundDurationMs
+      vi.advanceTimersByTime(duration)
       await flushPromises()
 
       if (round < totalRounds - 1) {
-        expect(store.state.race.status).toBe('awaiting')
+        expect(store.state.race.status).toBe('countdown')
+        vi.advanceTimersByTime(COUNTDOWN_DURATION_MS)
+        await flushPromises()
+        expect(store.state.race.status).toBe('running')
       }
     }
-
-    // complete final pending timers to finish race
-    vi.runAllTimers()
-    await flushPromises()
 
     expect(store.state.race.status).toBe('finished')
     expect(store.state.race.results.length).toBe(totalRounds)

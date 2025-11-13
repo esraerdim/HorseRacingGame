@@ -1,33 +1,8 @@
-<script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, watch } from 'vue'
+<script lang="ts">
+import { defineAsyncComponent, defineComponent, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import type { RootState } from '@/store'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-
-const store = useStore<RootState>()
-const liveBoardVisible = ref(false)
-
-watch(
-  () => store.state.race.status,
-  (status) => {
-    if (status === 'idle') {
-      liveBoardVisible.value = false
-    }
-    if (status === 'running') {
-      liveBoardVisible.value = true
-    }
-    if (status === 'finished') {
-      liveBoardVisible.value = false
-    }
-  },
-  { immediate: true },
-)
-
-onMounted(() => {
-  if (!store.state.horses.pool.length) {
-    store.dispatch('horses/generatePool')
-  }
-})
 
 const HorseListPanel = defineAsyncComponent(
   () => import('@/components/sections/HorseListPanel.vue'),
@@ -44,6 +19,51 @@ const LiveBoardPanel = defineAsyncComponent(
 const RaceTrack = defineAsyncComponent(
   () => import('@/components/sections/RaceTrack.vue'),
 )
+export default defineComponent({
+  name: 'Game',
+  components: {
+    DefaultLayout,
+    HorseListPanel,
+    ControlsPanel,
+    ProgramResultsPanel,
+    LiveBoardPanel,
+    RaceTrack,
+  },
+  setup() {
+    const store = useStore<RootState>()
+    const liveBoardVisible = ref(false)
+
+    watch(
+      () => store.state.race.status,
+      (status) => {
+        if (status === 'idle') {
+          liveBoardVisible.value = false
+        }
+        if (status === 'running') {
+          liveBoardVisible.value = true
+        }
+        if (status === 'countdown') {
+          liveBoardVisible.value = true
+        }
+        if (status === 'finished') {
+          liveBoardVisible.value = false
+        }
+      },
+      { immediate: true },
+    )
+
+    onMounted(() => {
+      if (!store.state.horses.pool.length) {
+        store.dispatch('horses/generatePool')
+      }
+    })
+
+    return {
+      store,
+      liveBoardVisible,
+    }
+  },
+})
 </script>
 
 <template>

@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { createStore, type Store } from 'vuex'
-import GamePage from '@/pages/GamePage.vue'
+import Game from '@/pages/Game.vue'
 
-type GamePageStoreOptions = {
+type GameStoreOptions = {
   status?: string
 }
 
-const createGamePageStore = ({ status = 'idle' }: GamePageStoreOptions = {}) => {
+const createGameStore = ({ status = 'idle' }: GameStoreOptions = {}) => {
   const store = createStore({
     state: () => ({}),
     modules: {
@@ -39,14 +39,14 @@ const createStub = (className: string) => ({
   template: `<div class="${className}"></div>`,
 })
 
-describe('GamePage', () => {
+describe('Game', () => {
   beforeEach(() => {
     vi.useFakeTimers()
   })
 
   it('disables live results toggle when race status is idle', async () => {
-    const { store } = createGamePageStore({ status: 'idle' })
-    const wrapper = mount(GamePage, {
+    const { store } = createGameStore({ status: 'idle' })
+    const wrapper = mount(Game, {
       global: {
         plugins: [store],
         stubs: {
@@ -72,8 +72,8 @@ describe('GamePage', () => {
   })
 
   it('automatically shows live results when race starts running', async () => {
-    const { store } = createGamePageStore({ status: 'running' })
-    const wrapper = mount(GamePage, {
+    const { store } = createGameStore({ status: 'running' })
+    const wrapper = mount(Game, {
       global: {
         plugins: [store],
         stubs: {
@@ -95,8 +95,8 @@ describe('GamePage', () => {
   })
 
   it('toggles live results visibility when button is clicked', async () => {
-    const { store } = createGamePageStore({ status: 'ready' })
-    const wrapper = mount(GamePage, {
+    const { store } = createGameStore({ status: 'ready' })
+    const wrapper = mount(Game, {
       global: {
         plugins: [store],
         stubs: {

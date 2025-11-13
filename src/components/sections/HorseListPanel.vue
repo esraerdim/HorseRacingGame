@@ -27,7 +27,7 @@ import { useStore } from 'vuex'
 import type { Horse } from '@/types'
 import type { RootState } from '@/store'
 import AppPanel from '@/components/base/AppPanel.vue'
-import HorseCard from '@/components/features/HorseCard.vue'
+import HorseCard from '@/components/widgets/HorseCard.vue'
 
 const store = useStore<RootState>()
 

@@ -10,9 +10,51 @@
         muted
         playsinline
       />
-      <div v-if="lapLabel || distanceLabel" class="race-track__header">
+      <div
+        v-if="(!isCountdown || countdownSeconds <= 0) && (lapLabel || distanceLabel)"
+        class="race-track__header"
+      >
         <span v-if="lapLabel" class="race-track__lap">{{ lapLabel }}</span>
         <span v-if="distanceLabel" class="race-track__distance">{{ distanceLabel }}</span>
+      </div>
+      <div v-if="isCountdown && countdownSeconds > 0" class="race-track__countdown">
+        <div class="race-track__countdown-ring">
+          <svg
+            class="race-track__countdown-svg"
+            viewBox="0 0 180 180"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient :id="COUNTDOWN_GRADIENT_ID" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#a855f7" />
+                <stop offset="100%" stop-color="#4338ca" />
+              </linearGradient>
+            </defs>
+            <circle
+              class="race-track__countdown-circle race-track__countdown-circle--base"
+              cx="90"
+              cy="90"
+              :r="COUNTDOWN_RADIUS"
+            />
+            <circle
+              class="race-track__countdown-circle race-track__countdown-circle--progress"
+              cx="90"
+              cy="90"
+              :r="COUNTDOWN_RADIUS"
+              :stroke-dasharray="countdownCircumference"
+              :stroke-dashoffset="countdownStrokeDashoffset"
+              :stroke="countdownGradientUrl"
+              transform="rotate(-90 90 90)"
+            />
+          </svg>
+          <div class="race-track__countdown-text">
+            <span class="race-track__countdown-label">Next race</span>
+            <span class="race-track__countdown-label">starts in</span>
+            <span class="race-track__countdown-value">{{ countdownSeconds }}</span>
+            <span class="race-track__countdown-label-secondary">seconds</span>
+          </div>
+        </div>
       </div>
       <div
         class="race-track__track"
@@ -41,9 +83,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRaceTrack } from '@/shared/hooks/useRaceTrack'
-import { RaceTrackLane } from '@/components/features'
+import RaceTrackLane from '@/components/widgets/RaceTrackLane.vue'
 import { RACE_HORSES_PER_ROUND } from '@/shared/config/race'
-import raceAnimation from '@/assets/race_animation.mp4'
+import raceAnimation from '@/assets/race_animation.mp4?url'
 
 const {
   status,
@@ -51,6 +93,9 @@ const {
   runners,
   showAnimatedHorse,
   isPaused,
+  isCountdown,
+  countdownSeconds,
+  countdownProgress,
   formatLap,
 } = useRaceTrack()
 
@@ -70,6 +115,18 @@ const distanceLabel = computed(() => {
 const lapLabel = computed(() =>
   activeRound.value ? formatLap(activeRound.value.roundNumber) : null,
 )
+
+const COUNTDOWN_RADIUS = 70
+const COUNTDOWN_GRADIENT_ID = 'race-track-countdown-gradient'
+const countdownGradientUrl = `url(#${COUNTDOWN_GRADIENT_ID})`
+const countdownCircumference = 2 * Math.PI * COUNTDOWN_RADIUS
+const countdownStrokeDashoffset = computed(() => {
+  if (!isCountdown.value) {
+    return countdownCircumference
+  }
+  const ratio = Math.max(0, Math.min(1, countdownProgress.value))
+  return countdownCircumference * (1 - ratio)
+})
 </script>
 
 <style scoped>
@@ -186,6 +243,80 @@ const lapLabel = computed(() =>
 
 .race-track__distance {
   font-size: 0.88rem;
+}
+
+.race-track__countdown {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent !important;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.race-track__countdown-ring {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: clamp(200px, 20vw, 240px);
+  aspect-ratio: 1/1;
+  position: relative;
+  padding: 1.4rem;
+}
+
+.race-track__countdown-svg {
+  position: absolute;
+  inset: 0;
+}
+
+.race-track__countdown-circle {
+  fill: none;
+  stroke-width: 12;
+  transition: stroke-dashoffset 0.12s linear;
+}
+
+.race-track__countdown-circle--base {
+  stroke: rgba(226, 232, 240, 0.35);
+}
+
+.race-track__countdown-circle--progress {
+  stroke-linecap: round;
+}
+
+.race-track__countdown-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-align: center;
+  color: #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0;
+}
+
+.race-track__countdown-label {
+  font-size: clamp(0.62rem, 1vw, 0.74rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.race-track__countdown-value {
+  font-size: clamp(2.4rem, 4.2vw, 3rem);
+  font-weight: 600;
+  color: #f8fafc;
+  letter-spacing: 0.1em;
+}
+
+.race-track__countdown-label-secondary {
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  font-weight: 500;
+  opacity: 0.85;
 }
 
 @media (max-height: 760px) {

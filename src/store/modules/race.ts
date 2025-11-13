@@ -6,6 +6,8 @@ import { SeededRandom } from '@/shared/utils/random'
 
 const ROUND_MIN_DURATION_MS = 3500
 const SEGMENT_COUNT = 4
+export const COUNTDOWN_DURATION_MS = 5000 // 5 seconds countdown
+const COUNTDOWN_TICK_MS = 100
 
 const buildSegments = (
   entry: RaceRoundResult['entries'][number],
@@ -48,6 +50,9 @@ export interface RaceState {
   roundCompletedMs: number
   currentRoundPreview: RaceRoundResult | null
   currentRoundSegments: Record<number, number[]>
+  roundCountdownMs: number | null
+  roundCountdownTimerId: number | null
+  roundCountdownTotalMs: number | null
 }
 
 const initialState: RaceState = {
@@ -63,6 +68,9 @@ const initialState: RaceState = {
   roundCompletedMs: 0,
   currentRoundPreview: null,
   currentRoundSegments: {},
+  roundCountdownMs: null,
+  roundCountdownTimerId: null,
+  roundCountdownTotalMs: null,
 }
 
 export const raceModule: Module<RaceState, RootState> = {
@@ -123,6 +131,15 @@ export const raceModule: Module<RaceState, RootState> = {
     setCurrentRoundSegments(state, segments: Record<number, number[]>) {
       state.currentRoundSegments = segments
     },
+    setRoundCountdown(state, countdownMs: number | null) {
+      state.roundCountdownMs = countdownMs
+    },
+    setRoundCountdownTimer(state, timerId: number | null) {
+      state.roundCountdownTimerId = timerId
+    },
+    setRoundCountdownTotal(state, totalMs: number | null) {
+      state.roundCountdownTotalMs = totalMs
+    },
     reset(state) {
       state.status = 'idle'
       state.currentRoundIndex = 0
@@ -138,6 +155,12 @@ export const raceModule: Module<RaceState, RootState> = {
       state.roundCompletedMs = 0
       state.currentRoundPreview = null
       state.currentRoundSegments = {}
+      if (state.roundCountdownTimerId !== null) {
+        clearInterval(state.roundCountdownTimerId)
+      }
+      state.roundCountdownTimerId = null
+      state.roundCountdownMs = null
+      state.roundCountdownTotalMs = null
     },
   },
   actions: {
@@ -160,16 +183,29 @@ export const raceModule: Module<RaceState, RootState> = {
         throw new Error('Cannot start race without a prepared schedule.')
       }
       if (state.status === 'running') return
-      if (state.status === 'awaiting') {
+      if (state.status === 'awaiting' || state.status === 'countdown') {
         dispatch('startNextRound')
         return
       }
+      if (state.roundCountdownTimerId !== null) {
+        clearInterval(state.roundCountdownTimerId)
+        commit('setRoundCountdownTimer', null)
+      }
+      commit('setRoundCountdown', null)
+      commit('setRoundCountdown', null)
+      commit('setRoundCountdownTotal', null)
       commit('setStatus', 'running')
       commit('setPause', false)
       dispatch('processCurrentRound')
     },
     startNextRound({ dispatch, commit, state }) {
-      if (state.status !== 'awaiting') return
+      if (state.status !== 'awaiting' && state.status !== 'countdown') return
+      if (state.roundCountdownTimerId !== null) {
+        clearInterval(state.roundCountdownTimerId)
+        commit('setRoundCountdownTimer', null)
+      }
+      commit('setRoundCountdown', null)
+      commit('setRoundCountdownTotal', null)
       if (state.currentRoundIndex >= state.schedule.length - 1) {
         commit('setStatus', 'finished')
         return
@@ -201,6 +237,13 @@ export const raceModule: Module<RaceState, RootState> = {
         commit('setCurrentRoundPreview', null)
         commit('setCurrentRoundSegments', {})
         return
+      }
+      if (state.roundCountdownTimerId !== null) {
+        clearInterval(state.roundCountdownTimerId)
+        commit('setRoundCountdownTimer', null)
+      }
+      if (state.roundCountdownMs !== null) {
+        commit('setRoundCountdown', null)
       }
 
       const previewResult = simulateRoundResult({
@@ -237,7 +280,7 @@ export const raceModule: Module<RaceState, RootState> = {
       }, duration)
       commit('setRoundTimeout', timeoutId)
     },
-    completeCurrentRound({ state, commit, rootState }) {
+    completeCurrentRound({ state, commit, rootState, dispatch }) {
       const currentRound = state.schedule[state.currentRoundIndex]
       if (!currentRound) {
         commit('setStatus', 'finished')
@@ -269,10 +312,35 @@ export const raceModule: Module<RaceState, RootState> = {
       const isLastRound = state.currentRoundIndex >= state.schedule.length - 1
       if (isLastRound) {
         commit('setStatus', 'finished')
+        commit('setRoundCountdown', null)
+        commit('setRoundCountdownTotal', null)
         return
       }
 
-      commit('setStatus', 'awaiting')
+      dispatch('beginRoundCountdown')
+    },
+    beginRoundCountdown({ state, commit, dispatch }) {
+      if (state.roundCountdownTimerId !== null) {
+        clearInterval(state.roundCountdownTimerId)
+        commit('setRoundCountdownTimer', null)
+      }
+      commit('setStatus', 'countdown')
+      commit('setRoundCountdown', COUNTDOWN_DURATION_MS)
+      commit('setRoundCountdownTotal', COUNTDOWN_DURATION_MS)
+      const countdownStartedAt = Date.now()
+      const timerId = window.setInterval(() => {
+        const elapsed = Date.now() - countdownStartedAt
+        const remaining = Math.max(0, COUNTDOWN_DURATION_MS - elapsed)
+        commit('setRoundCountdown', remaining)
+        if (remaining <= 0) {
+          clearInterval(timerId)
+          commit('setRoundCountdownTimer', null)
+          commit('setRoundCountdown', null)
+          commit('setStatus', 'awaiting')
+          dispatch('startNextRound')
+        }
+      }, COUNTDOWN_TICK_MS)
+      commit('setRoundCountdownTimer', timerId)
     },
     pauseRace({ commit, state }) {
       if (state.status !== 'running') return

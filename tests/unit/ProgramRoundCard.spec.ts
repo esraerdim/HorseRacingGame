@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import ProgramRoundCard from '@/components/features/ProgramRoundCard.vue'
+import ProgramRoundCard from '@/components/widgets/ProgramRoundCard.vue'
 
 const defaultProps = {
   index: 1,

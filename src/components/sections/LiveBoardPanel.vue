@@ -34,8 +34,10 @@
 
 <script setup lang="ts">
 import { useLiveBoard } from '@/shared/hooks/useLiveBoard'
-import { AppPanel, AppBadge, AppProgressBar } from '@/components/base'
-import { LiveBoardEntry } from '@/components/features'
+import AppPanel from '@/components/base/AppPanel.vue'
+import AppBadge from '@/components/base/AppBadge.vue'
+import AppProgressBar from '@/components/base/AppProgressBar.vue'
+import LiveBoardEntry from '@/components/widgets/LiveBoardEntry.vue'
 const {
   activeRound,
   liveEntries,

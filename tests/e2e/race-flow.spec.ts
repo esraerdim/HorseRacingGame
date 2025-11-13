@@ -64,7 +64,7 @@ const fastForwardRace = async (page: Page) => {
         await store.dispatch('race/completeCurrentRound')
       }
 
-      if (store.state.race.status === 'awaiting') {
+      if (store.state.race.status === 'awaiting' || store.state.race.status === 'countdown') {
         await store.dispatch('race/startNextRound')
         await store.dispatch('race/processCurrentRound')
       }
@@ -82,12 +82,12 @@ test.describe('Race flow', () => {
     const { flow } = await prepareRace(page)
 
     await flow.click()
-    await expect(flow).toHaveText(/Pause|Next Lap/, { timeout: 5_000 })
+    await expect(flow).toHaveText(/Pause|Next Lap|Skip Countdown/, { timeout: 5_000 })
 
     const toggle = page.locator(TOGGLE_SELECTOR)
     await expect(toggle).toHaveText('Hide Live Results', { timeout: 5_000 })
 
-    await expect(flow).toHaveText('Next Lap', { timeout: FLOW_TIMEOUT })
+    await expect(flow).toHaveText(/Skip Countdown|Pause/, { timeout: FLOW_TIMEOUT })
   })
 
   test('user can pause/resume and toggle live results', async ({ page }) => {
@@ -106,7 +106,7 @@ test.describe('Race flow', () => {
       const store = (window as unknown as { __HORSE_RACING_STORE__?: any }).__HORSE_RACING_STORE__
       return store?.state?.race?.status
     })
-    expect(['paused', 'awaiting', 'finished']).toContain(statusAfterPause)
+    expect(['paused', 'awaiting', 'countdown', 'finished']).toContain(statusAfterPause)
 
     if (flowLabelAfterPause?.includes('Resume')) {
       await expect(toggle).toHaveText('Hide Live Results', { timeout: 5_000 })
@@ -120,7 +120,7 @@ test.describe('Race flow', () => {
     await expect(toggle).toHaveText('Hide Live Results', { timeout: 5_000 })
 
     await flow.click()
-    await expect(flow).toHaveText(/Pause|Next Lap|Race Finished/, { timeout: 5_000 })
+    await expect(flow).toHaveText(/Pause|Skip Countdown|Race Finished/, { timeout: 5_000 })
   })
 
   test('user can complete the entire race schedule', async ({ page }) => {

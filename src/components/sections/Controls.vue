@@ -35,6 +35,7 @@ const hasSchedule = computed(() => store.state.race.schedule.length > 0)
 const startPauseLabel = computed(() => {
   if (raceStatus.value === 'running') return 'Pause'
   if (raceStatus.value === 'paused') return 'Resume'
+  if (raceStatus.value === 'countdown') return 'Skip Countdown'
   if (raceStatus.value === 'awaiting') return 'Next Lap'
   if (raceStatus.value === 'finished') return 'Race Finished'
   return 'Start'
@@ -50,6 +51,8 @@ const handleStartPause = () => {
     store.dispatch('race/pauseRace')
   } else if (raceStatus.value === 'paused') {
     store.dispatch('race/resumeRace')
+  } else if (raceStatus.value === 'countdown') {
+    store.dispatch('race/startNextRound')
   } else if (raceStatus.value === 'awaiting') {
     store.dispatch('race/startNextRound')
   } else {

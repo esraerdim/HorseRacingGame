@@ -1,6 +1,6 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { RaceRound, RaceRoundResult } from '@/types'
-import { useRaceState } from '@/shared/hooks/useRaceState'
+import { useRaceState } from './useRaceState'
 
 type LiveEntry = {
   id: number
@@ -47,6 +47,7 @@ export const useLiveBoard = () => {
     roundDuration,
     roundRemaining,
     roundCompleted,
+    roundCountdown,
     horseLookup,
   } = useRaceState()
 
@@ -122,6 +123,11 @@ export const useLiveBoard = () => {
       completed = duration - roundRemaining.value
     }
     return Math.max(0, Math.min(completed, duration))
+  })
+
+  const countdownSeconds = computed(() => {
+    if (!roundCountdown.value || roundCountdown.value < 0) return 0
+    return Math.ceil(roundCountdown.value / 1000)
   })
 
   const progress = computed(() => {
@@ -232,6 +238,7 @@ export const useLiveBoard = () => {
   const statusLabel = computed(() => {
     if (status.value === 'running') return 'Live'
     if (status.value === 'paused') return 'Paused'
+    if (status.value === 'countdown') return 'Countdown'
     if (status.value === 'awaiting') return 'Awaiting'
     if (hasFinishedCurrentRound.value) return 'Completed'
     return 'Upcoming'
@@ -240,6 +247,7 @@ export const useLiveBoard = () => {
   const badgeTone = computed(() => {
     if (status.value === 'running') return 'accent'
     if (status.value === 'paused') return 'warning'
+    if (status.value === 'countdown') return 'info'
     if (status.value === 'awaiting') return 'info'
     if (status.value === 'finished' || hasFinishedCurrentRound.value) return 'success'
     return 'neutral'
@@ -248,6 +256,7 @@ export const useLiveBoard = () => {
   const progressTone = computed(() => {
     if (status.value === 'running') return 'accent'
     if (status.value === 'paused') return 'warning'
+    if (status.value === 'countdown') return 'muted'
     if (status.value === 'awaiting') return 'muted'
     if (status.value === 'finished' || hasFinishedCurrentRound.value) return 'success'
     return 'info'
@@ -256,6 +265,7 @@ export const useLiveBoard = () => {
   const title = computed(() => {
     if (status.value === 'running') return 'Live Leaderboard'
     if (status.value === 'paused') return 'Race Paused'
+    if (status.value === 'countdown') return 'Next Lap Starting Soon'
     if (status.value === 'awaiting') return 'Awaiting Next Lap'
     if (hasFinishedCurrentRound.value) return 'Latest Results'
     return 'Next Round Lineup'
@@ -271,8 +281,15 @@ export const useLiveBoard = () => {
     if (status.value === 'paused') {
       return 'Round paused'
     }
+    if (status.value === 'countdown') {
+      const seconds = countdownSeconds.value
+      if (seconds > 0) {
+        return `Next lap starts in ${seconds} seconds`
+      }
+      return 'Next lap is about to start'
+    }
     if (status.value === 'awaiting') {
-      return 'Round completed – tap Next Lap to continue'
+      return 'Round completed – sıradaki tur hazırlanıyor'
     }
     if (hasFinishedCurrentRound.value) {
       return 'Round completed'
@@ -294,6 +311,7 @@ export const useLiveBoard = () => {
     title,
     subtitle,
     formatLap,
+    countdownSeconds,
   }
 }
 

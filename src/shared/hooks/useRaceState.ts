@@ -18,6 +18,8 @@ export const useRaceState = () => {
   const roundDuration = computed(() => store.state.race.roundDurationMs)
   const roundRemaining = computed(() => store.state.race.roundRemainingMs)
   const roundCompleted = computed(() => store.state.race.roundCompletedMs)
+  const roundCountdown = computed(() => store.state.race.roundCountdownMs)
+  const roundCountdownTotal = computed(() => store.state.race.roundCountdownTotalMs)
 
   const horseLookup = computed(() => {
     const map = new Map<number, Horse>()
@@ -37,6 +39,8 @@ export const useRaceState = () => {
     roundDuration,
     roundRemaining,
     roundCompleted,
+    roundCountdown,
+    roundCountdownTotal,
     horseLookup,
   }
 }

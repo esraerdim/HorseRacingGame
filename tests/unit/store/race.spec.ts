@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { createStore } from 'vuex'
-import { raceModule } from '@/store/modules/race'
+import { raceModule, COUNTDOWN_DURATION_MS } from '@/store/modules/race'
 import { horsesModule } from '@/store/modules/horses'
 import type { RaceRound, RaceRoundResult } from '@/types'
 
@@ -53,6 +53,9 @@ const createStoreInstance = () =>
           roundCompletedMs: 0,
           currentRoundPreview: null,
           currentRoundSegments: {},
+          roundCountdownMs: null,
+          roundCountdownTimerId: null,
+          roundCountdownTotalMs: null,
         },
       },
     },
@@ -101,7 +104,7 @@ describe('race module', () => {
     expect(store.state.race.roundRemainingMs).toBeGreaterThan(0)
   })
 
-  it('completes current round and moves to awaiting state', () => {
+  it('completes current round and begins countdown', () => {
     const store = createStoreInstance()
     store.dispatch('race/prepareRace', 123)
     store.commit('race/setStatus', 'running')
@@ -110,9 +113,30 @@ describe('race module', () => {
     store.dispatch('race/completeCurrentRound')
 
     expect(store.state.race.results).toHaveLength(1)
-    expect(store.state.race.status).toBe('awaiting')
+    expect(store.state.race.status).toBe('countdown')
+    expect(store.state.race.roundCountdownMs).toBeGreaterThan(0)
+    expect(store.state.race.roundCountdownTimerId).not.toBeNull()
+    expect(store.state.race.roundCountdownTotalMs).toBe(COUNTDOWN_DURATION_MS)
     expect(store.state.race.currentRoundSegments).toEqual({})
     expect(store.state.race.roundTimeoutId).toBeNull()
+  })
+
+  it('starts next round automatically after countdown completes', () => {
+    const store = createStoreInstance()
+    store.dispatch('race/prepareRace', 123)
+    store.commit('race/setStatus', 'running')
+    store.dispatch('race/processCurrentRound')
+
+    store.dispatch('race/completeCurrentRound')
+    expect(store.state.race.status).toBe('countdown')
+
+    expect(store.state.race.roundCountdownTotalMs).toBe(COUNTDOWN_DURATION_MS)
+
+    vi.advanceTimersByTime(COUNTDOWN_DURATION_MS)
+
+    expect(store.state.race.status).toBe('running')
+    expect(store.state.race.currentRoundIndex).toBe(1)
+    expect(store.state.race.roundCountdownTotalMs).toBeNull()
   })
 
   it('finishes race when last round is completed', () => {

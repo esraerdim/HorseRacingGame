@@ -4,7 +4,9 @@
       <slot name="header" />
     </header>
     <main class="default-layout__content">
-      <slot />
+      <div class="default-layout__slot">
+        <slot />
+      </div>
     </main>
   </div>
 </template>
@@ -13,7 +15,7 @@
 .default-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   gap: 0.6rem;
   padding: 0.3rem 1rem 1.3rem;
   background: var(--color-background);
@@ -27,7 +29,21 @@
 .default-layout__content {
   flex: 1;
   min-height: 0;
-  display: contents;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.default-layout__slot {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.default-layout__slot > * {
+  flex: 1;
+  min-height: 0;
 }
 </style>
 

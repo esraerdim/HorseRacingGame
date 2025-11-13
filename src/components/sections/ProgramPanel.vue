@@ -31,8 +31,8 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import type { Horse, RaceRound } from '@/types'
 import type { RootState } from '@/store'
-import { AppEmptyState } from '@/components/base'
-import { ProgramRoundCard } from '@/components/features'
+import AppEmptyState from '@/components/base/AppEmptyState.vue'
+import ProgramRoundCard from '@/components/widgets/ProgramRoundCard.vue'
 
 type ProgramRound = RaceRound & { horseNames: string[] }
 
@@ -58,17 +58,17 @@ const formatLap = (roundNumber: number) => {
 
 const horseLookup = computed(() => {
   const map = new Map<number, Horse>()
-  store.state.horses.pool.forEach((horse) => map.set(horse.id, horse))
+  store.state.horses.pool.forEach((horse: Horse) => map.set(horse.id, horse))
   return map
 })
 
 const currentRoundIndex = computed(() => store.state.race.currentRoundIndex)
 
 const programRounds = computed<ProgramRound[]>(() =>
-  store.state.race.schedule.map((round) => ({
+  store.state.race.schedule.map((round: RaceRound) => ({
     ...round,
     horseNames: round.horseIds.map(
-      (horseId) => horseLookup.value.get(horseId)?.name ?? `Horse ${horseId}`,
+      (horseId: number) => horseLookup.value.get(horseId)?.name ?? `Horse ${horseId}`,
     ),
   })),
 )

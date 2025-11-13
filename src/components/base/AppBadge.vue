@@ -33,43 +33,52 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 4rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  min-width: 3.6rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
+  color: #1f2937;
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.28);
 }
 
 .app-badge--accent {
-  background: rgba(244, 63, 94, 0.18);
-  color: #be123c;
+  background: rgba(79, 70, 229, 0.12);
+  color: #4338ca;
+  border-color: rgba(79, 70, 229, 0.24);
 }
 
 .app-badge--success {
-  background: rgba(34, 197, 94, 0.18);
-  color: #166534;
+  background: rgba(34, 197, 94, 0.14);
+  color: #15803d;
+  border-color: rgba(34, 197, 94, 0.26);
 }
 
 .app-badge--warning {
-  background: rgba(250, 204, 21, 0.18);
+  background: rgba(250, 204, 21, 0.16);
   color: #b45309;
+  border-color: rgba(250, 204, 21, 0.28);
 }
 
 .app-badge--info {
-  background: rgba(59, 130, 246, 0.18);
+  background: rgba(59, 130, 246, 0.14);
   color: #1d4ed8;
+  border-color: rgba(59, 130, 246, 0.24);
 }
 
 .app-badge--neutral {
-  background: rgba(148, 163, 184, 0.18);
-  color: #475569;
+  background: rgba(148, 163, 184, 0.12);
+  color: #1e293b;
+  border-color: rgba(148, 163, 184, 0.26);
 }
 
 .app-badge--danger {
-  background: rgba(244, 63, 94, 0.18);
+  background: rgba(248, 113, 113, 0.14);
   color: #b91c1c;
+  border-color: rgba(248, 113, 113, 0.26);
 }
 </style>
 

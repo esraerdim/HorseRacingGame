@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import RaceTrackLane from '@/components/features/RaceTrackLane.vue'
-import RaceHorseSprite from '@/components/features/RaceHorseSprite.vue'
+import RaceTrackLane from '@/components/widgets/RaceTrackLane.vue'
+import RaceHorseSprite from '@/components/widgets/RaceHorseSprite.vue'
 
 describe('RaceTrackLane', () => {
   const baseProps = {

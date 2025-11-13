@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
-import RaceHorseSprite from '@/components/features/RaceHorseSprite.vue'
+import RaceHorseSprite from '@/components/widgets/RaceHorseSprite.vue'
 
 type RaceHorseSpriteProps = InstanceType<typeof RaceHorseSprite>['$props']
 

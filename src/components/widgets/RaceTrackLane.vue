@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import RaceHorseSprite from '@/components/features/RaceHorseSprite.vue'
+import RaceHorseSprite from '@/components/widgets/RaceHorseSprite.vue'
 
 export default defineComponent({
   name: 'RaceTrackLane',

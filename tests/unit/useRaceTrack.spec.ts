@@ -20,6 +20,8 @@ type RaceStateMock = {
   roundDuration: Ref<number | null>
   roundRemaining: Ref<number | null>
   roundCompleted: Ref<number | null>
+  roundCountdown: Ref<number | null>
+  roundCountdownTotal: Ref<number | null>
   horseLookup: Ref<Map<number, { id: number; name: string; color: string }>>
 }
 
@@ -34,6 +36,8 @@ const createRaceState = (): RaceStateMock => ({
   roundDuration: ref<number | null>(null),
   roundRemaining: ref<number | null>(null),
   roundCompleted: ref<number | null>(null),
+  roundCountdown: ref<number | null>(null),
+  roundCountdownTotal: ref<number | null>(null),
   horseLookup: ref(new Map()),
 })
 
@@ -215,6 +219,17 @@ describe('useRaceTrack', () => {
     await nextTick()
     expect(mounted.composable.isPaused.value).toBe(true)
     expect(mounted.composable.showAnimatedHorse.value).toBe(false)
+  })
+
+  it('provides countdown progress ratio', () => {
+    state.status.value = 'countdown'
+    state.roundCountdownTotal.value = 5000
+    state.roundCountdown.value = 2500
+
+    const mounted = mountComposable(state)
+    wrapper = mounted.wrapper
+
+    expect(mounted.composable.countdownProgress.value).toBeCloseTo(0.5)
   })
 })
 

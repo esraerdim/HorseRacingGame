@@ -27,10 +27,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import type { Horse, RaceRoundResult } from '@/types'
+import type { Horse, RaceRound, RaceRoundResult } from '@/types'
 import type { RootState } from '@/store'
-import { AppEmptyState } from '@/components/base'
-import { ResultRoundCard } from '@/components/features'
+import AppEmptyState from '@/components/base/AppEmptyState.vue'
+import ResultRoundCard from '@/components/widgets/ResultRoundCard.vue'
 type EnrichedResult = RaceRoundResult & {
   distance: number
   entries: Array<
@@ -46,15 +46,15 @@ const store = useStore<RootState>()
 
 const horseLookup = computed(() => {
   const map = new Map<number, Horse>()
-  store.state.horses.pool.forEach((horse) => map.set(horse.id, horse))
+  store.state.horses.pool.forEach((horse: Horse) => map.set(horse.id, horse))
   return map
 })
 
 const results = computed<EnrichedResult[]>(() => {
   const schedule = store.state.race.schedule
-  return store.state.race.results.map((roundResult) => {
+  return store.state.race.results.map((roundResult: RaceRoundResult) => {
     const scheduleInfo = schedule.find(
-      (round) => round.roundNumber === roundResult.roundNumber,
+      (round: RaceRound) => round.roundNumber === roundResult.roundNumber,
     )
     const distance = scheduleInfo?.distance ?? 0
 

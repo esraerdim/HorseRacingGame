@@ -45,6 +45,8 @@ const createControlsStore = ({
             distance: 1200,
             horseIds: [],
           })),
+          roundCountdownMs: null,
+          roundCountdownTotalMs: null,
         }),
         actions: {
           pauseRace,
@@ -133,6 +135,23 @@ describe('Controls', () => {
     expect(startButton.text()).toBe('Resume')
     await startButton.trigger('click')
     expect(actions.resumeRace).toHaveBeenCalledTimes(1)
+  })
+
+  it('allows skipping countdown when status is countdown', async () => {
+    const { store, actions } = createControlsStore({
+      status: 'countdown',
+      scheduleLength: 2,
+    })
+    const wrapper = mount(Controls, {
+      global: {
+        plugins: [store],
+      },
+    })
+
+    const startButton = wrapper.findAll('button')[1]!
+    expect(startButton.text()).toBe('Skip Countdown')
+    await startButton.trigger('click')
+    expect(actions.startNextRound).toHaveBeenCalledTimes(1)
   })
 
   it('disables start button if no schedule is available', () => {

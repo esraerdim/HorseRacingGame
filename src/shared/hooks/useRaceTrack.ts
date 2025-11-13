@@ -1,7 +1,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { RaceRound, RaceRoundResult } from '@/types'
 import horseRunningAudio from '@/assets/horse-running.mp3'
-import { useRaceState } from '@/shared/hooks/useRaceState'
+import { useRaceState } from './useRaceState'
 
 type PreviewEntry = RaceRoundResult['entries'][number]
 type TrackRunner = {
@@ -75,6 +75,8 @@ export const useRaceTrack = () => {
     roundDuration,
     roundRemaining,
     roundCompleted,
+    roundCountdown,
+    roundCountdownTotal,
     horseLookup,
   } = useRaceState()
 
@@ -170,6 +172,7 @@ export const useRaceTrack = () => {
   const runners = computed<TrackRunner[]>(() => {
     const round = activeRound.value
     if (!round) return []
+    if (status.value === 'countdown') return []
 
     if (status.value === 'finished' && latestResult.value?.roundNumber === round.roundNumber) {
       const entryMap = new Map<number, PreviewEntry>()
@@ -260,10 +263,28 @@ export const useRaceTrack = () => {
 
   const isPaused = computed(() => status.value === 'paused')
   const showAnimatedHorse = computed(() => status.value === 'running')
+  const isCountdown = computed(() => status.value === 'countdown')
+  const countdownSeconds = computed(() => {
+    if (!roundCountdown.value || roundCountdown.value < 0) return 0
+    return Math.ceil(roundCountdown.value / 1000)
+  })
+  const countdownProgress = computed(() => {
+    if (
+      !roundCountdown.value ||
+      roundCountdown.value < 0 ||
+      !roundCountdownTotal.value ||
+      roundCountdownTotal.value <= 0
+    ) {
+      return 0
+    }
+    const ratio = roundCountdown.value / roundCountdownTotal.value
+    return Math.max(0, Math.min(1, ratio))
+  })
 
   const statusLabel = computed(() => {
     if (status.value === 'running') return 'Live'
     if (status.value === 'paused') return 'Paused'
+    if (status.value === 'countdown') return 'Countdown'
     if (status.value === 'awaiting') return 'Awaiting'
     if (status.value === 'finished') return 'Finished'
     return 'Ready'
@@ -272,6 +293,7 @@ export const useRaceTrack = () => {
   const statusTone = computed(() => {
     if (status.value === 'running') return 'accent'
     if (status.value === 'paused') return 'warning'
+    if (status.value === 'countdown') return 'info'
     if (status.value === 'awaiting') return 'info'
     if (status.value === 'finished') return 'success'
     return 'neutral'
@@ -284,6 +306,9 @@ export const useRaceTrack = () => {
     runners,
     showAnimatedHorse,
     isPaused,
+    isCountdown,
+    countdownSeconds,
+    countdownProgress,
     statusLabel,
     statusTone,
     formatLap,
