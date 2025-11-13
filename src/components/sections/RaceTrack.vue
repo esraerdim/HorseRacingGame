@@ -144,7 +144,7 @@ const countdownStrokeDashoffset = computed(() => {
   justify-content: flex-end;
   gap: 0.6rem;
   height: 100%;
-  min-height: 0;
+  min-height: clamp(340px, 52vh, 520px);
   border-radius: 1.3rem;
   padding: 0;
   position: relative;
@@ -158,12 +158,13 @@ const countdownStrokeDashoffset = computed(() => {
 .race-track__track {
   position: relative;
   flex: 1;
-  max-height: min(450px, 55%);
-  padding: 0.7rem 0.15rem 0.1rem;
+  max-height: clamp(260px, 60vh, 500px);
+  padding: 0.6rem 0.15rem 0.75rem;
   display: grid;
-  grid-template-rows: repeat(var(--lane-count, 1), minmax(2.4rem, 1fr));
-  row-gap: 0.06rem;
-  overflow: hidden;
+  grid-template-rows: repeat(var(--lane-count, 1), minmax(2rem, 1fr));
+  row-gap: 0.04rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
   background:
     linear-gradient(
       to bottom,
@@ -183,7 +184,7 @@ const countdownStrokeDashoffset = computed(() => {
   content: '';
   position: absolute;
   top: 1.25rem;
-  bottom: 0.5rem;
+  bottom: 1.2rem;
   right: 0.75rem;
   width: 0.25rem;
   background: repeating-linear-gradient(
@@ -262,7 +263,7 @@ const countdownStrokeDashoffset = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: clamp(200px, 20vw, 240px);
+    width: clamp(200px, 22vw, 260px);
   aspect-ratio: 1/1;
   position: relative;
   padding: 1.4rem;
@@ -319,10 +320,25 @@ const countdownStrokeDashoffset = computed(() => {
   opacity: 0.85;
 }
 
-@media (max-height: 760px) {
+@media (max-width: 1024px) {
+  .race-track__inner {
+    min-height: clamp(360px, 58vh, 560px);
+  }
+
   .race-track__track {
-    overflow-y: auto;
-    scrollbar-width: thin;
+    max-height: clamp(280px, 48vh, 480px);
+    height: calc(2.2rem * var(--lane-count, 8) + 5rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .race-track__inner {
+    min-height: clamp(400px, 68vh, 620px);
+  }
+
+  .race-track__track {
+    max-height: none;
+    height: calc(2.3rem * var(--lane-count, 10) + 5.4rem);
   }
 }
 </style>

@@ -45,6 +45,27 @@
   flex: 1;
   min-height: 0;
 }
+
+@media (max-width: 1024px) {
+  .default-layout {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .default-layout__content {
+    overflow: visible;
+  }
+
+  .default-layout__slot {
+    min-height: auto;
+  }
+
+  .default-layout__slot > * {
+    min-height: auto;
+  }
+}
+
 </style>
 
 

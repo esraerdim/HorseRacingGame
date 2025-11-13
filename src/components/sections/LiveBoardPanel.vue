@@ -57,6 +57,8 @@ const {
   flex-direction: column;
   gap: 0.7rem;
   flex: none;
+  width: 100%;
+  min-width: 0;
 }
 
 .live-board__header {
@@ -64,6 +66,7 @@ const {
   justify-content: space-between;
   align-items: flex-start;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .live-board__header h2 {
@@ -81,6 +84,8 @@ const {
 
 .live-board__badge {
   min-width: 4rem;
+  flex-shrink: 0;
+  align-self: flex-start;
 }
 
 .live-board__empty {
@@ -100,9 +105,22 @@ const {
 .live-board__meta {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
   color: #4b5563;
   font-weight: 600;
   font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .live-board__header > div {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .live-board__meta {
+    flex-wrap: wrap;
+  }
 }
 
 .live-board__list {

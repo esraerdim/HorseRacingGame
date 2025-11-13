@@ -154,7 +154,7 @@ describe('Controls', () => {
     expect(actions.startNextRound).toHaveBeenCalledTimes(1)
   })
 
-  it('disables start button if no schedule is available', () => {
+  it('hides start button if no schedule is available', () => {
     const { store } = createControlsStore({
       status: 'ready',
       scheduleLength: 0,
@@ -165,8 +165,10 @@ describe('Controls', () => {
       },
     })
 
-    const startButton = wrapper.findAll('button')[1]!
-    expect(startButton.attributes('disabled')).toBeDefined()
+    const startButton = wrapper.findAll('button').find((button) =>
+      button.text().toLowerCase().includes('start'),
+    )
+    expect(startButton).toBeUndefined()
   })
 })
 

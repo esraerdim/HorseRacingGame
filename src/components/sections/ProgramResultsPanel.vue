@@ -33,8 +33,9 @@ const ResultsPanel = defineAsyncComponent(
     </header>
 
     <div class="program-results__content">
-      <ProgramPanel v-if="activeTab === 'program'" />
-      <ResultsPanel v-else />
+      <Transition name="program-results-fade" mode="out-in">
+        <component :is="activeTab === 'program' ? ProgramPanel : ResultsPanel" />
+      </Transition>
     </div>
   </section>
 </template>
@@ -97,5 +98,43 @@ const ResultsPanel = defineAsyncComponent(
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.program-results-fade-enter-active,
+.program-results-fade-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.program-results-fade-enter-from,
+.program-results-fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@media (max-width: 640px) {
+  .program-results {
+    padding: 1rem;
+    gap: 0.75rem;
+    border-radius: 1rem;
+    box-shadow:
+      0 12px 24px rgba(15, 23, 42, 0.06),
+      0 1px 4px rgba(15, 23, 42, 0.05);
+    min-height: 320px;
+    overflow: visible;
+  }
+
+  .program-results__tabs {
+    gap: 0.35rem;
+  }
+
+  .program-results__tab {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .program-results__content {
+    overflow: visible;
+  }
 }
 </style>
