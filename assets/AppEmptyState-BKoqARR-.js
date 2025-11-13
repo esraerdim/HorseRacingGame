@@ -1,0 +1,1 @@
+import{_ as t,e as s,o as c,y as o}from"./index-DEQgLic1.js";const a={},n={class:"app-empty-state"};function r(e,_){return c(),s("div",n,[o(e.$slots,"default",{},void 0)])}const d=t(a,[["render",r],["__scopeId","data-v-1cffce5c"]]);export{d as A};
